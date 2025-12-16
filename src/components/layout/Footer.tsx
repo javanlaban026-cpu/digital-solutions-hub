@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
+import logo from "@/assets/logo.jpg";
 
 const footerLinks = {
   services: [
@@ -27,13 +28,8 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center">
-                <span className="text-primary-foreground font-heading font-bold text-lg">JL</span>
-              </div>
-              <span className="font-heading font-semibold text-foreground">
-                JL Software & Digital Systems
-              </span>
+            <Link to="/" className="flex items-center gap-3 mb-4">
+              <img src={logo} alt="JL Software" className="h-12 w-auto object-contain" />
             </Link>
             <p className="text-muted-foreground text-sm mb-6 max-w-sm">
               Web Design, Software Development & Digital Systems. Building modern digital solutions that help businesses operate smarter.
