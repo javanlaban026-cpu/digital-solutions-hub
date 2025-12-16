@@ -3,6 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { ServiceCard } from "@/components/shared/ServiceCard";
+import { AnimatedBackground } from "@/components/shared/AnimatedBackground";
 import {
   Globe,
   Code2,
@@ -65,10 +66,11 @@ const Index = () => {
     <Layout>
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsl(192_91%_52%_/_0.15),_transparent_50%)]" />
-        <div className="absolute top-1/4 -right-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] animate-pulse-glow" />
-        <div className="absolute bottom-1/4 -left-1/4 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px]" />
+        {/* Animated Background */}
+        <AnimatedBackground />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsl(192_91%_52%_/_0.08),_transparent_60%)]" />
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -147,7 +149,7 @@ const Index = () => {
             {clientTypes.map((client, index) => (
               <div
                 key={index}
-                className="flex items-center gap-3 px-6 py-4 glass-card rounded-xl hover:border-primary/30 transition-all duration-300"
+                className="flex items-center gap-3 px-6 py-4 blur-card rounded-xl transition-all duration-300 hover:-translate-y-1"
               >
                 <client.icon className="w-5 h-5 text-primary" />
                 <span className="text-foreground font-medium">{client.label}</span>
@@ -168,8 +170,8 @@ const Index = () => {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
             {/* POS System */}
-            <div className="glass-card rounded-2xl p-8 lg:p-10 hover:border-primary/30 transition-all duration-300 group">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center mb-6">
+            <div className="blur-card rounded-2xl p-8 lg:p-10 transition-all duration-300 group hover:-translate-y-2">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center mb-6 group-hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)] transition-shadow duration-300">
                 <ShoppingCart className="w-7 h-7 text-primary-foreground" />
               </div>
               <h3 className="text-2xl font-heading font-bold text-foreground mb-4">JL POS System</h3>
@@ -185,15 +187,15 @@ const Index = () => {
                 ))}
               </ul>
               <Link to="/products">
-                <Button variant="outline" className="group-hover:border-primary/50">
+                <Button variant="outline" className="group-hover:border-primary/50 group-hover:bg-primary/10">
                   Learn More <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
             </div>
 
             {/* School Management */}
-            <div className="glass-card rounded-2xl p-8 lg:p-10 hover:border-primary/30 transition-all duration-300 group">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center mb-6">
+            <div className="blur-card rounded-2xl p-8 lg:p-10 transition-all duration-300 group hover:-translate-y-2">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center mb-6 group-hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)] transition-shadow duration-300">
                 <GraduationCap className="w-7 h-7 text-primary-foreground" />
               </div>
               <h3 className="text-2xl font-heading font-bold text-foreground mb-4">JL School Management</h3>
@@ -209,7 +211,7 @@ const Index = () => {
                 ))}
               </ul>
               <Link to="/products">
-                <Button variant="outline" className="group-hover:border-primary/50">
+                <Button variant="outline" className="group-hover:border-primary/50 group-hover:bg-primary/10">
                   Learn More <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
