@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Pencil, Trash2, Eye, EyeOff } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Upload, Image } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 interface PortfolioItem {
   id: string;
@@ -40,6 +41,8 @@ const AdminPortfolio = () => {
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<PortfolioItem | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -68,6 +71,30 @@ const AdminPortfolio = () => {
   useEffect(() => {
     fetchItems();
   }, []);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("portfolio")
+      .upload(fileName, file);
+
+    if (uploadError) {
+      toast({ title: "Upload Error", description: uploadError.message, variant: "destructive" });
+      setUploading(false);
+      return;
+    }
+
+    const { data } = supabase.storage.from("portfolio").getPublicUrl(fileName);
+    setFormData({ ...formData, image_url: data.publicUrl });
+    setUploading(false);
+    toast({ title: "Image uploaded successfully" });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,25 +186,90 @@ const AdminPortfolio = () => {
             <DialogTrigger asChild>
               <Button><Plus className="w-4 h-4 mr-2" /> Add Project</Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{editingItem ? "Edit Project" : "Add New Project"}</DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <Input placeholder="Title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} required />
-                <Textarea placeholder="Description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
-                <Input placeholder="Category (e.g., Website, Software)" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} required />
-                <Input placeholder="Technologies (comma-separated)" value={formData.technologies} onChange={(e) => setFormData({ ...formData, technologies: e.target.value })} />
-                <Input placeholder="Tags (comma-separated)" value={formData.tags} onChange={(e) => setFormData({ ...formData, tags: e.target.value })} />
-                <Input placeholder="Image URL" value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} />
-                <Input placeholder="Project URL" value={formData.project_url} onChange={(e) => setFormData({ ...formData, project_url: e.target.value })} />
-                <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="published">Published</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="space-y-2">
+                  <Label>Title</Label>
+                  <Input placeholder="Project title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} required />
+                </div>
+                <div className="space-y-2">
+                  <Label>Description</Label>
+                  <Textarea placeholder="Project description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Category</Label>
+                  <Input placeholder="e.g., Website, Software, Mobile App" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} required />
+                </div>
+                <div className="space-y-2">
+                  <Label>Technologies (comma-separated)</Label>
+                  <Input placeholder="React, Node.js, PostgreSQL" value={formData.technologies} onChange={(e) => setFormData({ ...formData, technologies: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Tags (comma-separated)</Label>
+                  <Input placeholder="web, e-commerce, responsive" value={formData.tags} onChange={(e) => setFormData({ ...formData, tags: e.target.value })} />
+                </div>
+                
+                {/* Image Upload */}
+                <div className="space-y-2">
+                  <Label>Project Image</Label>
+                  <div className="flex flex-col gap-2">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploading}
+                      className="w-full"
+                    >
+                      {uploading ? (
+                        "Uploading..."
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Upload Image
+                        </>
+                      )}
+                    </Button>
+                    {formData.image_url && (
+                      <div className="relative">
+                        <img src={formData.image_url} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute top-2 right-2"
+                          onClick={() => setFormData({ ...formData, image_url: "" })}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Project URL (optional)</Label>
+                  <Input placeholder="https://..." value={formData.project_url} onChange={(e) => setFormData({ ...formData, project_url: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Status</Label>
+                  <Select value={formData.status} onValueChange={(v) => setFormData({ ...formData, status: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="draft">Draft</SelectItem>
+                      <SelectItem value="published">Published</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <Button type="submit" className="w-full">{editingItem ? "Update" : "Create"}</Button>
               </form>
             </DialogContent>
@@ -192,9 +284,18 @@ const AdminPortfolio = () => {
           <div className="grid gap-4">
             {items.map((item) => (
               <div key={item.id} className="glass-card rounded-xl p-4 flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-foreground">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.category} • {item.status}</p>
+                <div className="flex items-center gap-4">
+                  {item.image_url ? (
+                    <img src={item.image_url} alt={item.title} className="w-16 h-16 object-cover rounded-lg" />
+                  ) : (
+                    <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center">
+                      <Image className="w-6 h-6 text-muted-foreground" />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="font-semibold text-foreground">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground">{item.category} • {item.status}</p>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="ghost" size="icon" onClick={() => toggleStatus(item)}>
