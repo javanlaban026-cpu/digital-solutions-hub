@@ -1,6 +1,5 @@
 import { Layout } from "@/components/layout/Layout";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { ServiceCard } from "@/components/shared/ServiceCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
@@ -14,10 +13,8 @@ import {
   ArrowRight,
   ShieldCheck,
   Zap,
-  Database,
-  Cloud,
-  Cog,
-  LineChart,
+  Mail,
+  Image,
 } from "lucide-react";
 
 const websiteTypes = [
@@ -62,6 +59,26 @@ const uiuxServices = [
   "Brand & Design Systems",
 ];
 
+const graphicDesignServices = [
+  "Brand Identity Design",
+  "Logo Design & Branding",
+  "UI Graphics & Icons",
+  "Marketing Materials",
+  "Social Media Graphics",
+  "Print Design",
+  "Digital Advertisements",
+];
+
+const emailServices = [
+  "Business Email Setup",
+  "Domain-based Email Configuration",
+  "Email Security & DNS Setup",
+  "Email Migration & Support",
+  "Microsoft 365 Setup",
+  "Google Workspace Setup",
+  "Email Hosting Solutions",
+];
+
 const technicalServices = [
   "API Development & Integration",
   "Payment Gateway Integration",
@@ -86,7 +103,7 @@ const Services = () => {
     <Layout>
       {/* Hero */}
       <section className="relative py-24 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsl(192_91%_52%_/_0.1),_transparent_50%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent" />
         <div className="container mx-auto px-4 relative z-10">
           <SectionHeader
             label="Our Services"
@@ -101,7 +118,7 @@ const Services = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center mb-6">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
                 <Globe className="w-7 h-7 text-primary" />
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
@@ -135,7 +152,7 @@ const Services = () => {
       </section>
 
       {/* Software Development */}
-      <section className="py-20 lg:py-28 bg-card/50">
+      <section className="py-20 lg:py-28 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="glass-card rounded-2xl p-8 order-2 lg:order-1">
@@ -153,7 +170,7 @@ const Services = () => {
               </p>
             </div>
             <div className="order-1 lg:order-2">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center mb-6">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
                 <Code2 className="w-7 h-7 text-primary" />
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
@@ -172,7 +189,7 @@ const Services = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center mb-6">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
                 <Smartphone className="w-7 h-7 text-primary" />
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
@@ -209,10 +226,10 @@ const Services = () => {
       </section>
 
       {/* UI/UX Design */}
-      <section className="py-20 lg:py-28 bg-card/50">
+      <section className="py-20 lg:py-28 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center mb-6 mx-auto">
+            <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 mx-auto">
               <Palette className="w-7 h-7 text-primary" />
             </div>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
@@ -224,10 +241,70 @@ const Services = () => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {uiuxServices.map((service) => (
-              <div key={service} className="glass-card rounded-xl p-6 text-center hover:border-primary/30 transition-all duration-300">
+              <div key={service} className="glass-card rounded-xl p-6 text-center">
                 <p className="text-foreground font-medium">{service}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Graphic Design Services - NEW */}
+      <section className="py-20 lg:py-28">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+                <Image className="w-7 h-7 text-primary" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+                Graphic Design Services
+              </h2>
+              <p className="text-muted-foreground mb-8">
+                Create a strong visual identity for your brand. From logos to marketing materials, we design graphics that capture attention and communicate your message effectively.
+              </p>
+            </div>
+            <div className="glass-card rounded-2xl p-8">
+              <h3 className="text-xl font-heading font-semibold text-foreground mb-6">What We Design</h3>
+              <ul className="space-y-3">
+                {graphicDesignServices.map((service) => (
+                  <li key={service} className="flex items-center gap-3 text-muted-foreground">
+                    <Check className="w-5 h-5 text-primary flex-shrink-0" />
+                    {service}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Email Setup & Configuration - NEW */}
+      <section className="py-20 lg:py-28 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="glass-card rounded-2xl p-8 order-2 lg:order-1">
+              <h3 className="text-xl font-heading font-semibold text-foreground mb-6">Email Services</h3>
+              <ul className="space-y-3">
+                {emailServices.map((service) => (
+                  <li key={service} className="flex items-center gap-3 text-muted-foreground">
+                    <Check className="w-5 h-5 text-primary flex-shrink-0" />
+                    {service}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="order-1 lg:order-2">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+                <Mail className="w-7 h-7 text-primary" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+                Email Setup & Configuration
+              </h2>
+              <p className="text-muted-foreground">
+                Professional email solutions for your business. We set up, configure, and migrate your business email with proper security, DNS settings, and seamless integration with your domain.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -236,7 +313,7 @@ const Services = () => {
       <section className="py-20 lg:py-28">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center mb-6 mx-auto">
+            <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 mx-auto">
               <Server className="w-7 h-7 text-primary" />
             </div>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
@@ -248,7 +325,7 @@ const Services = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {technicalServices.map((service) => (
-              <div key={service} className="flex items-center gap-3 glass-card rounded-xl p-4 hover:border-primary/30 transition-all duration-300">
+              <div key={service} className="flex items-center gap-3 glass-card rounded-xl p-4">
                 <Check className="w-5 h-5 text-primary flex-shrink-0" />
                 <span className="text-foreground text-sm">{service}</span>
               </div>
@@ -258,11 +335,11 @@ const Services = () => {
       </section>
 
       {/* Maintenance & Support */}
-      <section className="py-20 lg:py-28 bg-card/50">
+      <section className="py-20 lg:py-28 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center mb-6">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
                 <Headphones className="w-7 h-7 text-primary" />
               </div>
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
@@ -290,8 +367,7 @@ const Services = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-24 lg:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-blue-500/10" />
+      <section className="py-24 lg:py-32 relative overflow-hidden bg-primary/5">
         <div className="container mx-auto px-4 relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
             Ready to Get Started?

@@ -29,8 +29,8 @@ const mainMenuItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
   { title: "Users", url: "/admin/users", icon: Users },
   { title: "Roles", url: "/admin/roles", icon: Shield },
-  { title: "Activity Log", url: "/admin/activity", icon: Activity },
-  { title: "Notifications", url: "/admin/notifications", icon: Bell },
+  { title: "Portfolio", url: "/admin/portfolio", icon: Activity },
+  { title: "Demo Requests", url: "/admin/demo-requests", icon: Bell },
 ];
 
 const settingsItems = [

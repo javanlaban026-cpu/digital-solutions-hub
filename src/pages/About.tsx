@@ -55,12 +55,12 @@ const About = () => {
     <Layout>
       {/* Hero */}
       <section className="relative py-24 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsl(192_91%_52%_/_0.1),_transparent_50%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent" />
         <div className="container mx-auto px-4 relative z-10">
           <SectionHeader
             label="About Us"
             title="Who We Are"
-            description="JL Software & Digital Systems is a focused team of developers and designers passionate about building reliable, scalable, and secure digital solutions."
+            description="JL Software & Digital Systems (JavaLab) is a focused team of developers and designers passionate about building reliable, scalable, and secure digital solutions."
           />
         </div>
       </section>
@@ -69,8 +69,8 @@ const About = () => {
       <section className="py-20 lg:py-28">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="glass-card rounded-2xl p-8 text-center hover:border-primary/30 transition-all duration-300">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center mb-6 mx-auto">
+            <div className="glass-card rounded-2xl p-8 text-center">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 mx-auto">
                 <Target className="w-7 h-7 text-primary" />
               </div>
               <h3 className="text-xl font-heading font-semibold text-foreground mb-3">Our Mission</h3>
@@ -78,8 +78,8 @@ const About = () => {
                 To deliver technology solutions that help businesses operate smarter and grow faster.
               </p>
             </div>
-            <div className="glass-card rounded-2xl p-8 text-center hover:border-primary/30 transition-all duration-300">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center mb-6 mx-auto">
+            <div className="glass-card rounded-2xl p-8 text-center">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 mx-auto">
                 <Heart className="w-7 h-7 text-primary" />
               </div>
               <h3 className="text-xl font-heading font-semibold text-foreground mb-3">Our Values</h3>
@@ -87,8 +87,8 @@ const About = () => {
                 Quality over quantity, clear communication, and long-term partnerships with our clients.
               </p>
             </div>
-            <div className="glass-card rounded-2xl p-8 text-center hover:border-primary/30 transition-all duration-300">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center mb-6 mx-auto">
+            <div className="glass-card rounded-2xl p-8 text-center">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 mx-auto">
                 <Users className="w-7 h-7 text-primary" />
               </div>
               <h3 className="text-xl font-heading font-semibold text-foreground mb-3">Our Approach</h3>
@@ -100,8 +100,25 @@ const About = () => {
         </div>
       </section>
 
+      {/* About JavaLab */}
+      <section className="py-20 lg:py-28 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
+              About JavaLab
+            </h2>
+            <p className="text-lg text-muted-foreground mb-6">
+              JavaLab is the parent brand behind JL Software & Digital Systems. Founded with a vision to bridge the gap between cutting-edge technology and practical business solutions, JavaLab represents our commitment to innovation, quality, and client success.
+            </p>
+            <p className="text-muted-foreground">
+              Under the JavaLab umbrella, we've built a reputation for delivering robust, scalable solutions that empower businesses across various industries. Our name reflects our roots in software development and our laboratory-like approach to solving complex technical challenges.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Team */}
-      <section className="py-20 lg:py-28 bg-card/50">
+      <section className="py-20 lg:py-28">
         <div className="container mx-auto px-4">
           <SectionHeader
             label="Our Team"
@@ -110,8 +127,8 @@ const About = () => {
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
             {teamMembers.map((member, index) => (
-              <div key={index} className="glass-card rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center mb-4">
+              <div key={index} className="glass-card rounded-2xl p-6">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                   <member.icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-heading font-semibold text-foreground mb-2">{member.role}</h3>
@@ -123,7 +140,7 @@ const About = () => {
       </section>
 
       {/* How We Work */}
-      <section className="py-20 lg:py-28">
+      <section className="py-20 lg:py-28 bg-muted/30">
         <div className="container mx-auto px-4">
           <SectionHeader
             label="Our Process"
@@ -133,7 +150,7 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
             {workProcess.slice(0, 4).map((item, index) => (
               <div key={index} className="relative">
-                <div className="glass-card rounded-2xl p-6 h-full hover:border-primary/30 transition-all duration-300">
+                <div className="glass-card rounded-2xl p-6 h-full">
                   <span className="text-5xl font-heading font-bold gradient-text opacity-50">{item.step}</span>
                   <h3 className="text-lg font-heading font-semibold text-foreground mt-4 mb-2">{item.title}</h3>
                   <p className="text-sm text-muted-foreground">{item.description}</p>
@@ -146,7 +163,7 @@ const About = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             {workProcess.slice(4).map((item, index) => (
-              <div key={index} className="glass-card rounded-2xl p-6 hover:border-primary/30 transition-all duration-300">
+              <div key={index} className="glass-card rounded-2xl p-6">
                 <span className="text-5xl font-heading font-bold gradient-text opacity-50">{item.step}</span>
                 <h3 className="text-lg font-heading font-semibold text-foreground mt-4 mb-2">{item.title}</h3>
                 <p className="text-sm text-muted-foreground">{item.description}</p>
@@ -157,7 +174,7 @@ const About = () => {
       </section>
 
       {/* Technologies */}
-      <section className="py-20 lg:py-28 bg-card/50">
+      <section className="py-20 lg:py-28">
         <div className="container mx-auto px-4">
           <SectionHeader
             label="Tech Stack"
@@ -180,8 +197,7 @@ const About = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-24 lg:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-blue-500/10" />
+      <section className="py-24 lg:py-32 relative overflow-hidden bg-primary/5">
         <div className="container mx-auto px-4 relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
             Ready to Work Together?
