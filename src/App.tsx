@@ -17,8 +17,8 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/admin/Dashboard";
 import Users from "./pages/admin/Users";
 import Roles from "./pages/admin/Roles";
-import Activity from "./pages/admin/Activity";
-import Notifications from "./pages/admin/Notifications";
+import AdminPortfolio from "./pages/admin/Portfolio";
+import DemoRequests from "./pages/admin/DemoRequests";
 import Settings from "./pages/admin/Settings";
 
 const queryClient = new QueryClient();
@@ -44,8 +44,8 @@ const App = () => (
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/admin/users" element={<Users />} />
             <Route path="/admin/roles" element={<Roles />} />
-            <Route path="/admin/activity" element={<Activity />} />
-            <Route path="/admin/notifications" element={<Notifications />} />
+            <Route path="/admin/portfolio" element={<AdminPortfolio />} />
+            <Route path="/admin/demo-requests" element={<DemoRequests />} />
             <Route path="/admin/settings" element={<Settings />} />
             
             <Route path="*" element={<NotFound />} />

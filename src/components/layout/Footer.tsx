@@ -8,6 +8,8 @@ const footerLinks = {
     { label: "Software Development", href: "/services" },
     { label: "Mobile Apps", href: "/services" },
     { label: "UI/UX Design", href: "/services" },
+    { label: "Graphic Design", href: "/services" },
+    { label: "Email Setup", href: "/services" },
   ],
   products: [
     { label: "JL POS System", href: "/products" },
@@ -31,6 +33,9 @@ export const Footer = () => {
             <Link to="/" className="flex items-center gap-3 mb-4">
               <img src={logo} alt="JL Software" className="h-12 w-auto object-contain" />
             </Link>
+            <p className="text-muted-foreground text-sm mb-2">
+              <strong>JL Software & Digital Systems (JavaLab)</strong>
+            </p>
             <p className="text-muted-foreground text-sm mb-6 max-w-sm">
               Web Design, Software Development & Digital Systems. Building modern digital solutions that help businesses operate smarter.
             </p>
@@ -105,7 +110,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} JL Software & Digital Systems. All Rights Reserved.
+            © {new Date().getFullYear()} JL Software & Digital Systems (JavaLab). All Rights Reserved.
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
             <Link to="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
