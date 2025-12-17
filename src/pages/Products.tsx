@@ -1,8 +1,14 @@
+import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { ShoppingCart, GraduationCap, Settings, Check, ArrowRight } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const posFeatures = [
   "Sales & Billing Management",
@@ -27,11 +33,50 @@ const schoolFeatures = [
 ];
 
 const Products = () => {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    company: "",
+    email: "",
+    phone: "",
+    product: "",
+    message: "",
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.product) {
+      toast({ title: "Error", description: "Please fill required fields", variant: "destructive" });
+      return;
+    }
+    setSubmitting(true);
+    const { error } = await supabase.from("demo_requests").insert({
+      name: formData.name,
+      company: formData.company || null,
+      email: formData.email,
+      phone: formData.phone || null,
+      product: formData.product,
+      message: formData.message || null,
+    });
+    setSubmitting(false);
+    if (error) {
+      toast({ title: "Error", description: "Failed to submit request. Please try again.", variant: "destructive" });
+    } else {
+      toast({ title: "Success!", description: "Your demo request has been submitted. We'll contact you soon." });
+      setFormData({ name: "", company: "", email: "", phone: "", product: "", message: "" });
+    }
+  };
+
+  const scrollToDemo = () => {
+    document.getElementById("demo-form")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <Layout>
       {/* Hero */}
       <section className="relative py-24 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_hsl(192_91%_52%_/_0.1),_transparent_50%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent" />
         <div className="container mx-auto px-4 relative z-10">
           <SectionHeader
             label="Our Products"
@@ -46,23 +91,21 @@ const Products = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center mb-6">
-                <ShoppingCart className="w-8 h-8 text-primary-foreground" />
+              <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-6">
+                <ShoppingCart className="w-7 h-7 text-primary-foreground" />
               </div>
               <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
                 Retail & Service
               </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
                 JL POS System
               </h2>
               <p className="text-lg text-muted-foreground mb-8">
                 A complete point-of-sale solution designed for retail and service businesses. Streamline your sales, manage inventory, and grow your business with powerful analytics.
               </p>
-              <Link to="/contact">
-                <Button variant="hero" size="lg">
-                  Get a Demo <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
+              <Button variant="hero" size="lg" onClick={scrollToDemo}>
+                Get a Demo <ArrowRight className="w-5 h-5" />
+              </Button>
             </div>
             <div className="glass-card rounded-2xl p-8">
               <h3 className="text-xl font-heading font-semibold text-foreground mb-6">Key Features</h3>
@@ -80,7 +123,7 @@ const Products = () => {
       </section>
 
       {/* JL School Management */}
-      <section className="py-20 lg:py-28 bg-card/50">
+      <section className="py-20 lg:py-28 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="glass-card rounded-2xl p-8 order-2 lg:order-1">
@@ -95,23 +138,21 @@ const Products = () => {
               </div>
             </div>
             <div className="order-1 lg:order-2">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center mb-6">
-                <GraduationCap className="w-8 h-8 text-primary-foreground" />
+              <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-6">
+                <GraduationCap className="w-7 h-7 text-primary-foreground" />
               </div>
               <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
                 Education
               </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
                 JL School Management
               </h2>
               <p className="text-lg text-muted-foreground mb-8">
                 A comprehensive digital platform for managing educational institutions. From enrollment to graduation, manage every aspect of your school efficiently.
               </p>
-              <Link to="/contact">
-                <Button variant="hero" size="lg">
-                  Get a Demo <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
+              <Button variant="hero" size="lg" onClick={scrollToDemo}>
+                Get a Demo <ArrowRight className="w-5 h-5" />
+              </Button>
             </div>
           </div>
         </div>
@@ -121,13 +162,13 @@ const Products = () => {
       <section className="py-20 lg:py-28">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center mb-6 mx-auto">
-              <Settings className="w-8 h-8 text-primary-foreground" />
+            <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-6 mx-auto">
+              <Settings className="w-7 h-7 text-primary-foreground" />
             </div>
             <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
               Tailored Solutions
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
               Custom Digital Systems
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
@@ -149,10 +190,91 @@ const Products = () => {
         </div>
       </section>
 
+      {/* Demo Request Form */}
+      <section id="demo-form" className="py-20 lg:py-28 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+                Request a Demo
+              </h2>
+              <p className="text-muted-foreground">
+                Fill out the form below and we'll schedule a personalized demo for you.
+              </p>
+            </div>
+            <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-8 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Name *</label>
+                  <Input
+                    placeholder="Your name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Company</label>
+                  <Input
+                    placeholder="Your company"
+                    value={formData.company}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Email *</label>
+                  <Input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Phone</label>
+                  <Input
+                    placeholder="Your phone number"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground mb-2 block">Product *</label>
+                <Select value={formData.product} onValueChange={(v) => setFormData({ ...formData, product: v })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a product" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="JL POS System">JL POS System</SelectItem>
+                    <SelectItem value="JL School Management">JL School Management</SelectItem>
+                    <SelectItem value="Custom System">Custom System</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground mb-2 block">Message</label>
+                <Textarea
+                  placeholder="Tell us about your requirements..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  rows={4}
+                />
+              </div>
+              <Button type="submit" variant="hero" className="w-full" disabled={submitting}>
+                {submitting ? "Submitting..." : "Submit Request"}
+              </Button>
+            </form>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="py-24 lg:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-blue-500/10" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[150px]" />
+      <section className="py-24 lg:py-32 relative overflow-hidden bg-primary/5">
         <div className="container mx-auto px-4 relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
             Ready to Transform Your Business?
@@ -160,11 +282,9 @@ const Products = () => {
           <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
             Get a personalized demo and see how our products can streamline your operations.
           </p>
-          <Link to="/contact">
-            <Button variant="hero" size="xl">
-              Request a Demo <ArrowRight className="w-5 h-5" />
-            </Button>
-          </Link>
+          <Button variant="hero" size="xl" onClick={scrollToDemo}>
+            Request a Demo <ArrowRight className="w-5 h-5" />
+          </Button>
         </div>
       </section>
     </Layout>
