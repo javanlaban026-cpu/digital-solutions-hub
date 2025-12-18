@@ -1,1 +1,4 @@
 project_id = "ltnlkaacsuevfmuvexxh"
+
+[functions.jl-assistant]
+verify_jwt = false
