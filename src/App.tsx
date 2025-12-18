@@ -19,6 +19,7 @@ import Users from "./pages/admin/Users";
 import Roles from "./pages/admin/Roles";
 import AdminPortfolio from "./pages/admin/Portfolio";
 import DemoRequests from "./pages/admin/DemoRequests";
+import ChatInquiries from "./pages/admin/ChatInquiries";
 import Settings from "./pages/admin/Settings";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/admin/roles" element={<Roles />} />
             <Route path="/admin/portfolio" element={<AdminPortfolio />} />
             <Route path="/admin/demo-requests" element={<DemoRequests />} />
+            <Route path="/admin/chat-inquiries" element={<ChatInquiries />} />
             <Route path="/admin/settings" element={<Settings />} />
             
             <Route path="*" element={<NotFound />} />
