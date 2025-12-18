@@ -37,10 +37,13 @@ const websiteFeatures = [
 const softwareSolutions = [
   "POS (Point of Sale) Systems",
   "School Management Systems",
+  "Hospital Management Systems",
+  "Pharmacy Management Systems",
   "Inventory Management Systems",
   "ERP & CRM Systems",
   "Billing & Accounting Software",
   "HR & Payroll Systems",
+  "Company Profile Websites",
   "Custom Business Software",
 ];
 
