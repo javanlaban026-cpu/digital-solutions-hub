@@ -8,6 +8,7 @@ import {
   Home,
   Activity,
   Bell,
+  MessageCircle,
 } from "lucide-react";
 import {
   Sidebar,
@@ -31,6 +32,7 @@ const mainMenuItems = [
   { title: "Roles", url: "/admin/roles", icon: Shield },
   { title: "Portfolio", url: "/admin/portfolio", icon: Activity },
   { title: "Demo Requests", url: "/admin/demo-requests", icon: Bell },
+  { title: "Chat Inquiries", url: "/admin/chat-inquiries", icon: MessageCircle },
 ];
 
 const settingsItems = [

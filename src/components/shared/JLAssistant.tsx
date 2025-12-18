@@ -5,6 +5,7 @@ import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   role: "user" | "assistant";
@@ -15,6 +16,7 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/jl-assistant
 
 export const JLAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -33,6 +35,41 @@ export const JLAssistant = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Create a new conversation when chat opens for first time
+  const createConversation = useCallback(async () => {
+    if (conversationId) return conversationId;
+    
+    const { data, error } = await supabase
+      .from("chat_conversations")
+      .insert({ status: "active" })
+      .select("id")
+      .single();
+
+    if (error) {
+      console.error("Error creating conversation:", error);
+      return null;
+    }
+
+    setConversationId(data.id);
+    
+    // Save the initial assistant message
+    await supabase.from("chat_messages").insert({
+      conversation_id: data.id,
+      role: "assistant",
+      content: messages[0].content,
+    });
+
+    return data.id;
+  }, [conversationId, messages]);
+
+  const saveMessage = async (convId: string, role: "user" | "assistant", content: string) => {
+    await supabase.from("chat_messages").insert({
+      conversation_id: convId,
+      role,
+      content,
+    });
+  };
 
   const streamChat = useCallback(
     async ({
@@ -122,10 +159,24 @@ export const JLAssistant = () => {
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
 
+    // Ensure conversation exists
+    const convId = await createConversation();
+    if (!convId) {
+      toast({
+        title: "Error",
+        description: "Failed to start conversation",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const userMessage: Message = { role: "user", content: input.trim() };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
+
+    // Save user message to database
+    await saveMessage(convId, "user", userMessage.content);
 
     let assistantContent = "";
 
@@ -144,7 +195,13 @@ export const JLAssistant = () => {
       await streamChat({
         messages: [...messages, userMessage],
         onDelta: (chunk) => updateAssistant(chunk),
-        onDone: () => setIsLoading(false),
+        onDone: async () => {
+          setIsLoading(false);
+          // Save complete assistant response to database
+          if (assistantContent) {
+            await saveMessage(convId, "assistant", assistantContent);
+          }
+        },
       });
     } catch (error) {
       console.error("Chat error:", error);
@@ -162,6 +219,16 @@ export const JLAssistant = () => {
       e.preventDefault();
       sendMessage();
     }
+  };
+
+  const startNewChat = () => {
+    setConversationId(null);
+    setMessages([
+      {
+        role: "assistant",
+        content: "Hi! I'm JL Assistant. How can I help you today? I can tell you about our services, current offers, or help you get a quote.",
+      },
+    ]);
   };
 
   return (
@@ -194,6 +261,15 @@ export const JLAssistant = () => {
             <h3 className="font-heading font-semibold text-primary-foreground">JL Assistant</h3>
             <p className="text-xs text-primary-foreground/80">Always here to help</p>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={startNewChat}
+            className="text-primary-foreground hover:bg-primary-foreground/10"
+            title="New chat"
+          >
+            <MessageCircle className="w-4 h-4" />
+          </Button>
           <Button
             variant="ghost"
             size="icon"
