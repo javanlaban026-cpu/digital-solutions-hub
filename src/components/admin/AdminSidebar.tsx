@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
-import logo from "@/assets/logo.jpg";
+import logo from "@/assets/logo.png";
 
 const mainMenuItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
