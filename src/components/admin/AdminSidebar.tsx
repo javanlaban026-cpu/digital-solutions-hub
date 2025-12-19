@@ -9,6 +9,9 @@ import {
   Activity,
   Bell,
   MessageCircle,
+  UsersRound,
+  Tag,
+  FileText,
 } from "lucide-react";
 import {
   Sidebar,
@@ -30,6 +33,9 @@ const mainMenuItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
   { title: "Users", url: "/admin/users", icon: Users },
   { title: "Roles", url: "/admin/roles", icon: Shield },
+  { title: "Team", url: "/admin/team", icon: UsersRound },
+  { title: "Offers", url: "/admin/offers", icon: Tag },
+  { title: "Blog", url: "/admin/blog", icon: FileText },
   { title: "Portfolio", url: "/admin/portfolio", icon: Activity },
   { title: "Demo Requests", url: "/admin/demo-requests", icon: Bell },
   { title: "Chat Inquiries", url: "/admin/chat-inquiries", icon: MessageCircle },

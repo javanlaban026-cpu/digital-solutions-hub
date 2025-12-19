@@ -11,6 +11,8 @@ import About from "./pages/About";
 import Portfolio from "./pages/Portfolio";
 import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 
 // Admin Pages
@@ -21,6 +23,9 @@ import AdminPortfolio from "./pages/admin/Portfolio";
 import DemoRequests from "./pages/admin/DemoRequests";
 import ChatInquiries from "./pages/admin/ChatInquiries";
 import Settings from "./pages/admin/Settings";
+import Team from "./pages/admin/Team";
+import Offers from "./pages/admin/Offers";
+import AdminBlog from "./pages/admin/Blog";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +43,8 @@ const App = () => (
             <Route path="/products" element={<Products />} />
             <Route path="/about" element={<About />} />
             <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
             
@@ -48,6 +55,9 @@ const App = () => (
             <Route path="/admin/portfolio" element={<AdminPortfolio />} />
             <Route path="/admin/demo-requests" element={<DemoRequests />} />
             <Route path="/admin/chat-inquiries" element={<ChatInquiries />} />
+            <Route path="/admin/team" element={<Team />} />
+            <Route path="/admin/offers" element={<Offers />} />
+            <Route path="/admin/blog" element={<AdminBlog />} />
             <Route path="/admin/settings" element={<Settings />} />
             
             <Route path="*" element={<NotFound />} />
