@@ -1,36 +1,18 @@
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Users, Target, Heart, ArrowRight, Code2, Palette, Database, TestTube } from "lucide-react";
+import { Users, Target, Heart, ArrowRight, Code2, UserCircle } from "lucide-react";
 
-const teamMembers = [
-  {
-    role: "Founder & Lead Software Engineer",
-    description: "System architecture & backend development",
-    icon: Code2,
-  },
-  {
-    role: "Frontend Developer",
-    description: "Modern UI & performance optimization",
-    icon: Palette,
-  },
-  {
-    role: "Backend / Systems Engineer",
-    description: "Business logic & integrations",
-    icon: Database,
-  },
-  {
-    role: "UI/UX Designer",
-    description: "User experience & visual design",
-    icon: Palette,
-  },
-  {
-    role: "QA & Support Engineer",
-    description: "Testing & client support",
-    icon: TestTube,
-  },
-];
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  description: string | null;
+  image_url: string | null;
+}
 
 const workProcess = [
   { step: "01", title: "Requirement Analysis", description: "Understanding your business needs" },
@@ -51,6 +33,19 @@ const technologies = {
 };
 
 const About = () => {
+  const { data: teamMembers } = useQuery({
+    queryKey: ["public-team-members"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("team_members")
+        .select("id, name, role, description, image_url")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data as TeamMember[];
+    },
+  });
+
   return (
     <Layout>
       {/* Hero */}
@@ -126,15 +121,33 @@ const About = () => {
             description="A lean but highly skilled team dedicated to building exceptional digital solutions."
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
-            {teamMembers.map((member, index) => (
-              <div key={index} className="glass-card rounded-2xl p-6">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                  <member.icon className="w-6 h-6 text-primary" />
+            {teamMembers && teamMembers.length > 0 ? (
+              teamMembers.map((member) => (
+                <div key={member.id} className="glass-card rounded-2xl p-6 text-center">
+                  {member.image_url ? (
+                    <img
+                      src={member.image_url}
+                      alt={member.name}
+                      className="w-24 h-24 rounded-full object-cover mx-auto mb-4"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <UserCircle className="w-12 h-12 text-primary" />
+                    </div>
+                  )}
+                  <h3 className="text-lg font-heading font-semibold text-foreground mb-1">{member.name}</h3>
+                  <p className="text-primary text-sm font-medium mb-2">{member.role}</p>
+                  {member.description && (
+                    <p className="text-sm text-muted-foreground">{member.description}</p>
+                  )}
                 </div>
-                <h3 className="text-lg font-heading font-semibold text-foreground mb-2">{member.role}</h3>
-                <p className="text-sm text-muted-foreground">{member.description}</p>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-8">
+                <Code2 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">Team members coming soon!</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>

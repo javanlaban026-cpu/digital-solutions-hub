@@ -4,6 +4,7 @@ import { Menu, X, LogIn, LayoutDashboard, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
+import { InstallButton } from "@/components/shared/InstallButton";
 import logo from "@/assets/logo.png";
 import {
   DropdownMenu,
@@ -19,6 +20,7 @@ const navLinks = [
   { href: "/products", label: "Products" },
   { href: "/about", label: "About" },
   { href: "/portfolio", label: "Portfolio" },
+  { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -56,6 +58,7 @@ export const Navbar = () => {
 
           {/* Auth & CTA Buttons */}
           <div className="hidden lg:flex items-center gap-3">
+            <InstallButton />
             {!loading && (
               <>
                 {user ? (
