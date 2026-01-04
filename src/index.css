@@ -37,13 +37,23 @@
 
     --radius: 0.5rem;
 
+    /* Expertise Showcase tokens */
+    --gold: 43 74% 49%;
+    --gold-muted: 43 45% 35%;
+    --navy: 220 40% 13%;
+    --charcoal: 210 20% 18%;
+    --ivory: 45 30% 96%;
+
     /* Custom tokens - Dark theme */
     --gradient-primary: linear-gradient(135deg, hsl(197 100% 50%) 0%, hsl(217 100% 55%) 100%);
     --gradient-hero: linear-gradient(180deg, hsl(210 25% 13%) 0%, hsl(210 22% 16%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(210 22% 18%) 0%, hsl(210 22% 14%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(43 74% 49%) 0%, hsl(35 80% 55%) 100%);
     --glow-primary: 0 4px 30px hsl(197 100% 50% / 0.3);
     --glow-soft: 0 2px 15px hsl(197 100% 50% / 0.15);
+    --glow-gold: 0 4px 30px hsl(43 74% 49% / 0.3);
     --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.3);
+    --shadow-premium: 0 10px 40px hsl(0 0% 0% / 0.4), 0 0 80px hsl(43 74% 49% / 0.08);
     
     --sidebar-background: 210 22% 14%;
     --sidebar-foreground: 210 20% 95%;
