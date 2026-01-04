@@ -6,53 +6,53 @@
 
 @layer base {
   :root {
-    /* Modern Corporate Theme - Light */
-    --background: 0 0% 97%;
-    --foreground: 0 0% 0%;
+    /* Dark Professional Theme - Inspired by Yaso Engineering */
+    --background: 210 25% 13%;
+    --foreground: 210 20% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card: 210 22% 16%;
+    --card-foreground: 210 20% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover: 210 22% 16%;
+    --popover-foreground: 210 20% 95%;
 
-    --primary: 217 100% 34%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 197 100% 50%;
+    --primary-foreground: 210 25% 10%;
 
-    --secondary: 210 14% 89%;
-    --secondary-foreground: 0 0% 0%;
+    --secondary: 210 20% 22%;
+    --secondary-foreground: 210 20% 95%;
 
-    --muted: 210 14% 93%;
-    --muted-foreground: 209 14% 45%;
+    --muted: 210 18% 20%;
+    --muted-foreground: 210 15% 65%;
 
     --accent: 197 100% 50%;
-    --accent-foreground: 0 0% 0%;
+    --accent-foreground: 210 25% 10%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 14% 83%;
-    --input: 210 14% 83%;
-    --ring: 217 100% 34%;
+    --border: 210 18% 25%;
+    --input: 210 18% 25%;
+    --ring: 197 100% 50%;
 
     --radius: 0.5rem;
 
-    /* Custom tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(217 100% 34%) 0%, hsl(197 100% 50%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(0 0% 97%) 0%, hsl(0 0% 100%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 14% 96%) 100%);
-    --glow-primary: 0 4px 20px hsl(217 100% 34% / 0.2);
-    --glow-soft: 0 2px 12px hsl(217 100% 34% / 0.1);
-    --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.08);
+    /* Custom tokens - Dark theme */
+    --gradient-primary: linear-gradient(135deg, hsl(197 100% 50%) 0%, hsl(217 100% 55%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(210 25% 13%) 0%, hsl(210 22% 16%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(210 22% 18%) 0%, hsl(210 22% 14%) 100%);
+    --glow-primary: 0 4px 30px hsl(197 100% 50% / 0.3);
+    --glow-soft: 0 2px 15px hsl(197 100% 50% / 0.15);
+    --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.3);
     
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 0 0% 0%;
-    --sidebar-primary: 217 100% 34%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 14% 93%;
-    --sidebar-accent-foreground: 0 0% 0%;
-    --sidebar-border: 210 14% 83%;
-    --sidebar-ring: 217 100% 34%;
+    --sidebar-background: 210 22% 14%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 197 100% 50%;
+    --sidebar-primary-foreground: 210 25% 10%;
+    --sidebar-accent: 210 18% 20%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 210 18% 25%;
+    --sidebar-ring: 197 100% 50%;
   }
 }
 
