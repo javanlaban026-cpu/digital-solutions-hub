@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Tag, X, Sparkles } from "lucide-react";
+import { X } from "lucide-react";
 import { useState } from "react";
+import specialOfferIcon from "@/assets/special-offer-icon.png";
 
 interface Offer {
   id: string;
@@ -39,92 +40,86 @@ export const FloatingOfferBadge = () => {
       {/* Floating Badge Icon */}
       <div
         className={`fixed bottom-24 right-6 z-50 cursor-pointer transition-all duration-300 ${
-          expanded ? "scale-0 opacity-0" : "scale-100 opacity-100"
+          expanded ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
         }`}
         onClick={() => setExpanded(true)}
       >
-        <div className="relative animate-bounce">
+        <div className="relative animate-bounce hover:animate-none hover:scale-110 transition-transform">
           {/* Glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-red-500 to-yellow-400 rounded-full blur-lg opacity-60 animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-red-500 to-yellow-400 rounded-lg blur-xl opacity-50 animate-pulse" />
           
-          {/* Main badge */}
-          <div className="relative bg-gradient-to-br from-red-500 via-yellow-400 to-red-600 p-4 rounded-full shadow-2xl border-2 border-yellow-300">
-            <div className="relative">
-              <Tag className="w-7 h-7 text-white" />
-              <Sparkles className="w-4 h-4 text-yellow-200 absolute -top-1 -right-1 animate-ping" />
-            </div>
-          </div>
-          
-          {/* Discount bubble */}
-          {offer.discount_percentage && (
-            <div className="absolute -top-2 -right-2 bg-yellow-400 text-red-700 text-xs font-black px-2 py-1 rounded-full shadow-lg animate-pulse border border-red-500">
-              {offer.discount_percentage}%
-            </div>
-          )}
+          {/* Main badge image */}
+          <img 
+            src={specialOfferIcon} 
+            alt="Special Offer" 
+            className="relative w-24 h-24 object-contain drop-shadow-2xl"
+          />
         </div>
       </div>
 
       {/* Expanded Offer Card */}
       <div
         className={`fixed bottom-24 right-6 z-50 transition-all duration-300 ${
-          expanded ? "scale-100 opacity-100" : "scale-0 opacity-0"
+          expanded ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"
         }`}
       >
-        <div className="relative bg-gradient-to-br from-red-600 via-yellow-500 to-red-500 p-1 rounded-2xl shadow-2xl">
-          <div className="bg-card rounded-2xl p-4 min-w-[280px] max-w-[320px]">
-            {/* Close button */}
-            <button
-              onClick={() => setExpanded(false)}
-              className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+        <div className="relative">
+          {/* Close button */}
+          <button
+            onClick={() => setExpanded(false)}
+            className="absolute -top-2 -right-2 z-10 bg-destructive text-destructive-foreground rounded-full p-1 shadow-lg hover:scale-110 transition-transform"
+          >
+            <X className="w-4 h-4" />
+          </button>
 
-            {/* Dismiss button */}
-            <button
-              onClick={() => setDismissed(true)}
-              className="absolute top-2 left-2 text-xs text-muted-foreground hover:text-destructive transition-colors"
-            >
-              Dismiss
-            </button>
-
-            {/* Content */}
-            <div className="text-center pt-4">
-              {/* Special Offer Header */}
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Sparkles className="w-5 h-5 text-yellow-500" />
-                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Special Offer
-                </span>
-                <Sparkles className="w-5 h-5 text-yellow-500" />
+          {/* Card with gradient border */}
+          <div className="bg-gradient-to-br from-red-500 via-yellow-400 to-red-600 p-1 rounded-2xl shadow-2xl">
+            <div className="bg-card rounded-2xl p-4 min-w-[300px] max-w-[340px]">
+              {/* Offer Icon */}
+              <div className="flex justify-center -mt-16 mb-3">
+                <img 
+                  src={specialOfferIcon} 
+                  alt="Special Offer" 
+                  className="w-28 h-28 object-contain drop-shadow-xl"
+                />
               </div>
 
-              {/* Discount */}
-              {offer.discount_percentage && (
-                <div className="bg-gradient-to-r from-red-500 to-yellow-500 bg-clip-text text-transparent text-4xl font-black mb-2">
-                  {offer.discount_percentage}% OFF
-                </div>
-              )}
-
               {/* Title */}
-              <h3 className="text-lg font-bold text-foreground mb-2">
+              <h3 className="text-xl font-bold text-foreground text-center mb-2">
                 {offer.title}
               </h3>
 
+              {/* Discount Badge */}
+              {offer.discount_percentage && (
+                <div className="flex justify-center mb-3">
+                  <span className="bg-gradient-to-r from-red-500 to-yellow-500 text-white text-2xl font-black px-4 py-2 rounded-full shadow-lg">
+                    {offer.discount_percentage}% OFF
+                  </span>
+                </div>
+              )}
+
               {/* Description */}
               {offer.description && (
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground text-center mb-4 leading-relaxed">
                   {offer.description}
                 </p>
               )}
 
-              {/* CTA */}
-              <a
-                href="/contact"
-                className="inline-block bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold px-6 py-2 rounded-full text-sm hover:shadow-lg transition-all hover:scale-105"
-              >
-                Claim Offer
-              </a>
+              {/* Action Buttons */}
+              <div className="flex flex-col gap-2">
+                <a
+                  href="/contact"
+                  className="w-full bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold px-6 py-3 rounded-full text-sm text-center hover:shadow-lg transition-all hover:scale-105"
+                >
+                  Claim This Offer
+                </a>
+                <button
+                  onClick={() => setDismissed(true)}
+                  className="text-xs text-muted-foreground hover:text-destructive transition-colors text-center py-1"
+                >
+                  No thanks, dismiss
+                </button>
+              </div>
             </div>
           </div>
         </div>
