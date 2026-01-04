@@ -1,0 +1,346 @@
+import { useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { SectionHeader } from "@/components/shared/SectionHeader";
+import { Linkedin, Mail, Twitter, Award, Briefcase, Calendar, Star, UserCircle } from "lucide-react";
+
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  description: string | null;
+  image_url: string | null;
+  display_order: number;
+}
+
+interface AnimatedStatProps {
+  value: number;
+  suffix?: string;
+  label: string;
+  delay?: number;
+}
+
+const AnimatedStat = ({ value, suffix = "", label, delay = 0 }: AnimatedStatProps) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true;
+          setTimeout(() => {
+            const duration = 2000;
+            const steps = 60;
+            const increment = value / steps;
+            let current = 0;
+            const interval = setInterval(() => {
+              current += increment;
+              if (current >= value) {
+                setCount(value);
+                clearInterval(interval);
+              } else {
+                setCount(Math.floor(current));
+              }
+            }, duration / steps);
+          }, delay);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [value, delay]);
+
+  return (
+    <div ref={ref} className="text-center">
+      <div className="text-2xl md:text-3xl font-heading font-bold text-gold">
+        {count}{suffix}
+      </div>
+      <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">{label}</div>
+    </div>
+  );
+};
+
+const ExpertCard = ({ 
+  member, 
+  isFounder = false,
+  animationDelay = 0 
+}: { 
+  member: TeamMember; 
+  isFounder?: boolean;
+  animationDelay?: number;
+}) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setTimeout(() => setIsVisible(true), animationDelay);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (cardRef.current) observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, [animationDelay]);
+
+  // Generate stats based on role (in real app, these would come from the database)
+  const stats = {
+    years: Math.floor(Math.random() * 10) + 5,
+    projects: Math.floor(Math.random() * 50) + 20,
+    awards: Math.floor(Math.random() * 5) + 1,
+  };
+
+  const milestones = [
+    { year: "2018", event: "Started Career" },
+    { year: "2020", event: "Lead Developer" },
+    { year: "2022", event: "Joined JavaLab" },
+    { year: "2024", event: "Senior Expert" },
+  ];
+
+  return (
+    <div
+      ref={cardRef}
+      className={`
+        relative group
+        ${isFounder ? 'lg:col-span-2 lg:row-span-1' : ''}
+        transform transition-all duration-700 ease-out
+        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
+      `}
+      style={{ transitionDelay: `${animationDelay}ms` }}
+    >
+      {/* Animated background glow */}
+      <div className="absolute -inset-1 bg-gradient-to-r from-gold/20 via-primary/20 to-gold/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      
+      {/* Card */}
+      <div className={`
+        relative overflow-hidden rounded-2xl
+        bg-gradient-to-br from-charcoal to-navy
+        border border-gold/10 hover:border-gold/30
+        shadow-premium
+        transition-all duration-500
+        hover:-translate-y-2 hover:shadow-[0_20px_60px_hsl(0_0%_0%_/_0.5),0_0_100px_hsl(43_74%_49%_/_0.12)]
+        ${isFounder ? 'p-8 lg:p-10' : 'p-6 lg:p-8'}
+      `}>
+        {/* Floating particles effect */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-gold/5 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-10 right-10 w-24 h-24 bg-primary/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }} />
+        </div>
+
+        <div className={`relative z-10 ${isFounder ? 'lg:flex lg:gap-10 lg:items-start' : ''}`}>
+          {/* Portrait with 3D effect */}
+          <div className={`relative ${isFounder ? 'lg:flex-shrink-0' : 'mx-auto'} mb-6 lg:mb-0`}>
+            <div className={`
+              relative ${isFounder ? 'w-40 h-40' : 'w-32 h-32'} mx-auto lg:mx-0
+              rounded-2xl overflow-hidden
+              shadow-[0_8px_32px_rgba(0,0,0,0.4)]
+              border-2 border-gold/20
+              transform transition-transform duration-500 group-hover:scale-105
+              before:absolute before:inset-0 before:bg-gradient-to-tr before:from-transparent before:via-white/10 before:to-transparent before:opacity-0 group-hover:before:opacity-100 before:transition-opacity
+            `}>
+              {member.image_url ? (
+                <img
+                  src={member.image_url}
+                  alt={member.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-gold/20 to-primary/20 flex items-center justify-center">
+                  <UserCircle className="w-16 h-16 text-gold/50" />
+                </div>
+              )}
+              {/* 3D shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
+            </div>
+            
+            {/* Founder badge */}
+            {isFounder && (
+              <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-gold to-gold-muted text-navy text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                FOUNDER
+              </div>
+            )}
+          </div>
+
+          {/* Content */}
+          <div className={`${isFounder ? 'lg:flex-1' : 'text-center lg:text-left'}`}>
+            {/* Name & Role */}
+            <h3 className={`
+              font-heading font-bold text-ivory
+              ${isFounder ? 'text-2xl lg:text-3xl' : 'text-xl lg:text-2xl'}
+              mb-1
+            `}>
+              {member.name}
+            </h3>
+            <p className="text-gold font-medium text-sm uppercase tracking-wider mb-3">
+              {member.role}
+            </p>
+
+            {/* Tagline/Quote */}
+            <p className={`
+              text-muted-foreground italic text-sm mb-5
+              border-l-2 border-gold/30 pl-4
+              ${isFounder ? '' : 'mx-auto lg:mx-0 max-w-xs'}
+            `}>
+              "{member.description || 'Passionate about building exceptional digital solutions that transform businesses.'}"
+            </p>
+
+            {/* Stats Grid */}
+            <div className={`
+              grid grid-cols-3 gap-4 mb-6 py-4 
+              border-y border-gold/10
+            `}>
+              <AnimatedStat value={stats.years} suffix="+" label="Years Exp" delay={animationDelay + 200} />
+              <AnimatedStat value={stats.projects} suffix="+" label="Projects" delay={animationDelay + 400} />
+              <AnimatedStat value={stats.awards} label="Awards" delay={animationDelay + 600} />
+            </div>
+
+            {/* Mini Timeline */}
+            <div className="mb-6">
+              <div className="flex items-center gap-2 text-xs text-gold/70 mb-3">
+                <Calendar className="w-3 h-3" />
+                <span className="uppercase tracking-wider">Career Milestones</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {milestones.map((m, i) => (
+                  <div 
+                    key={i} 
+                    className="flex items-center gap-2 text-xs bg-gold/5 border border-gold/10 rounded-full px-3 py-1.5"
+                  >
+                    <span className="text-gold font-bold">{m.year}</span>
+                    <span className="text-muted-foreground">{m.event}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Social/Contact Icons */}
+            <div className="flex items-center justify-center lg:justify-start gap-3">
+              <a 
+                href="#" 
+                className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-110"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+              <a 
+                href="#" 
+                className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-110"
+              >
+                <Twitter className="w-4 h-4" />
+              </a>
+              <a 
+                href="#" 
+                className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-110"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative elements */}
+        <div className="absolute top-4 right-4 flex gap-1">
+          <Star className="w-4 h-4 text-gold/30" />
+          <Star className="w-4 h-4 text-gold/20" />
+          <Star className="w-4 h-4 text-gold/10" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const ExpertiseShowcase = () => {
+  const { data: teamMembers, isLoading } = useQuery({
+    queryKey: ["home-team-members"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("team_members")
+        .select("id, name, role, description, image_url, display_order")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data as TeamMember[];
+    },
+  });
+
+  return (
+    <section className="relative py-24 lg:py-32 overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-navy via-background to-background" />
+        
+        {/* Floating particles */}
+        <div className="absolute top-20 left-[10%] w-64 h-64 bg-gold/5 rounded-full blur-3xl animate-float" />
+        <div className="absolute top-40 right-[15%] w-48 h-48 bg-primary/5 rounded-full blur-2xl animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-20 left-[20%] w-32 h-32 bg-gold/10 rounded-full blur-2xl animate-float" style={{ animationDelay: '4s' }} />
+        <div className="absolute bottom-40 right-[10%] w-56 h-56 bg-primary/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
+        
+        {/* Grid pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `linear-gradient(hsl(var(--gold)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--gold)) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px'
+          }}
+        />
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/20 text-gold text-sm font-medium mb-6">
+            <Award className="w-4 h-4" />
+            Meet Our Experts
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+            The Living{" "}
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-gold to-gold-muted">
+              Expertise Showcase
+            </span>
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Our founders and experts bring decades of combined experience, delivering exceptional digital solutions that transform businesses.
+          </p>
+        </div>
+
+        {/* Team Grid */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-96 rounded-2xl bg-charcoal/50 animate-pulse" />
+            ))}
+          </div>
+        ) : teamMembers && teamMembers.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {teamMembers.map((member, index) => (
+              <ExpertCard
+                key={member.id}
+                member={member}
+                isFounder={index === 0}
+                animationDelay={index * 150}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <div className="w-24 h-24 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-6">
+              <Briefcase className="w-12 h-12 text-gold/50" />
+            </div>
+            <h3 className="text-xl font-heading font-bold text-foreground mb-2">Expert Profiles Coming Soon</h3>
+            <p className="text-muted-foreground">Our team profiles are being prepared. Check back soon!</p>
+          </div>
+        )}
+
+        {/* Decorative bottom border */}
+        <div className="mt-20 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      </div>
+    </section>
+  );
+};

@@ -3,6 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { ServiceCard } from "@/components/shared/ServiceCard";
+import { ExpertiseShowcase } from "@/components/home/ExpertiseShowcase";
 import heroImage from "@/assets/hero-workspace.png";
 import {
   Globe,
@@ -139,6 +140,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Living Expertise Showcase */}
+      <ExpertiseShowcase />
 
       {/* Who We Work With */}
       <section className="py-24 lg:py-32 bg-muted/30">
