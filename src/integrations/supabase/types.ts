@@ -303,37 +303,73 @@ export type Database = {
       }
       team_members: {
         Row: {
+          awards: number | null
+          career_milestones: Json | null
+          certifications: number | null
           created_at: string
           description: string | null
           display_order: number | null
+          email: string | null
           id: string
           image_url: string | null
           is_active: boolean | null
+          linkedin_url: string | null
           name: string
+          portfolio_highlights: Json | null
+          projects_completed: number | null
           role: string
+          tagline: string | null
+          testimonials: Json | null
+          twitter_url: string | null
           updated_at: string
+          website_url: string | null
+          years_experience: number | null
         }
         Insert: {
+          awards?: number | null
+          career_milestones?: Json | null
+          certifications?: number | null
           created_at?: string
           description?: string | null
           display_order?: number | null
+          email?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          linkedin_url?: string | null
           name: string
+          portfolio_highlights?: Json | null
+          projects_completed?: number | null
           role: string
+          tagline?: string | null
+          testimonials?: Json | null
+          twitter_url?: string | null
           updated_at?: string
+          website_url?: string | null
+          years_experience?: number | null
         }
         Update: {
+          awards?: number | null
+          career_milestones?: Json | null
+          certifications?: number | null
           created_at?: string
           description?: string | null
           display_order?: number | null
+          email?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          linkedin_url?: string | null
           name?: string
+          portfolio_highlights?: Json | null
+          projects_completed?: number | null
           role?: string
+          tagline?: string | null
+          testimonials?: Json | null
+          twitter_url?: string | null
           updated_at?: string
+          website_url?: string | null
+          years_experience?: number | null
         }
         Relationships: []
       }

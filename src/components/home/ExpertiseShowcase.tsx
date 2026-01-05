@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { Linkedin, Mail, Twitter, Award, Briefcase, Calendar, Star, UserCircle } from "lucide-react";
+import { Linkedin, Mail, Twitter, Award, Briefcase, Calendar, Star, UserCircle, Globe } from "lucide-react";
 
 interface TeamMember {
   id: string;
@@ -11,6 +12,15 @@ interface TeamMember {
   description: string | null;
   image_url: string | null;
   display_order: number;
+  linkedin_url: string | null;
+  twitter_url: string | null;
+  email: string | null;
+  website_url: string | null;
+  years_experience: number | null;
+  projects_completed: number | null;
+  certifications: number | null;
+  awards: number | null;
+  tagline: string | null;
 }
 
 interface AnimatedStatProps {
@@ -90,33 +100,27 @@ const ExpertCard = ({
     return () => observer.disconnect();
   }, [animationDelay]);
 
-  // Generate stats based on role (in real app, these would come from the database)
+  // Use real stats from database if available
   const stats = {
-    years: Math.floor(Math.random() * 10) + 5,
-    projects: Math.floor(Math.random() * 50) + 20,
-    awards: Math.floor(Math.random() * 5) + 1,
+    years: member.years_experience || Math.floor(Math.random() * 10) + 5,
+    projects: member.projects_completed || Math.floor(Math.random() * 50) + 20,
+    awards: member.awards || Math.floor(Math.random() * 5) + 1,
   };
 
-  const milestones = [
-    { year: "2018", event: "Started Career" },
-    { year: "2020", event: "Lead Developer" },
-    { year: "2022", event: "Joined JavaLab" },
-    { year: "2024", event: "Senior Expert" },
-  ];
-
   return (
-    <div
-      ref={cardRef}
-      className={`
-        relative group
-        ${isFounder ? 'lg:col-span-2 lg:row-span-1' : ''}
-        transform transition-all duration-700 ease-out
-        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
-      `}
-      style={{ transitionDelay: `${animationDelay}ms` }}
-    >
-      {/* Animated background glow */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-gold/20 via-primary/20 to-gold/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+    <Link to={`/expert/${member.id}`} className="block">
+      <div
+        ref={cardRef}
+        className={`
+          relative group cursor-pointer
+          ${isFounder ? 'lg:col-span-2 lg:row-span-1' : ''}
+          transform transition-all duration-700 ease-out
+          ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
+        `}
+        style={{ transitionDelay: `${animationDelay}ms` }}
+      >
+        {/* Animated background glow */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-gold/20 via-primary/20 to-gold/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
       {/* Card */}
       <div className={`
@@ -188,7 +192,7 @@ const ExpertCard = ({
               border-l-2 border-gold/30 pl-4
               ${isFounder ? '' : 'mx-auto lg:mx-0 max-w-xs'}
             `}>
-              "{member.description || 'Passionate about building exceptional digital solutions that transform businesses.'}"
+              "{member.tagline || member.description || 'Passionate about building exceptional digital solutions that transform businesses.'}"
             </p>
 
             {/* Stats Grid */}
@@ -201,46 +205,52 @@ const ExpertCard = ({
               <AnimatedStat value={stats.awards} label="Awards" delay={animationDelay + 600} />
             </div>
 
-            {/* Mini Timeline */}
-            <div className="mb-6">
-              <div className="flex items-center gap-2 text-xs text-gold/70 mb-3">
-                <Calendar className="w-3 h-3" />
-                <span className="uppercase tracking-wider">Career Milestones</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {milestones.map((m, i) => (
-                  <div 
-                    key={i} 
-                    className="flex items-center gap-2 text-xs bg-gold/5 border border-gold/10 rounded-full px-3 py-1.5"
-                  >
-                    <span className="text-gold font-bold">{m.year}</span>
-                    <span className="text-muted-foreground">{m.event}</span>
-                  </div>
-                ))}
-              </div>
+            {/* Social/Contact Icons */}
+            <div className="flex items-center justify-center lg:justify-start gap-3" onClick={(e) => e.preventDefault()}>
+              {member.linkedin_url && (
+                <a 
+                  href={member.linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-110"
+                >
+                  <Linkedin className="w-4 h-4" />
+                </a>
+              )}
+              {member.twitter_url && (
+                <a 
+                  href={member.twitter_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-110"
+                >
+                  <Twitter className="w-4 h-4" />
+                </a>
+              )}
+              {member.email && (
+                <a 
+                  href={`mailto:${member.email}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-110"
+                >
+                  <Mail className="w-4 h-4" />
+                </a>
+              )}
+              {member.website_url && (
+                <a 
+                  href={member.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-110"
+                >
+                  <Globe className="w-4 h-4" />
+                </a>
+              )}
             </div>
 
-            {/* Social/Contact Icons */}
-            <div className="flex items-center justify-center lg:justify-start gap-3">
-              <a 
-                href="#" 
-                className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-110"
-              >
-                <Linkedin className="w-4 h-4" />
-              </a>
-              <a 
-                href="#" 
-                className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-110"
-              >
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a 
-                href="#" 
-                className="w-10 h-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center text-gold hover:bg-gold hover:text-navy transition-all duration-300 hover:scale-110"
-              >
-                <Mail className="w-4 h-4" />
-              </a>
-            </div>
           </div>
         </div>
 
@@ -251,7 +261,8 @@ const ExpertCard = ({
           <Star className="w-4 h-4 text-gold/10" />
         </div>
       </div>
-    </div>
+      </div>
+    </Link>
   );
 };
 
@@ -261,7 +272,7 @@ export const ExpertiseShowcase = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("team_members")
-        .select("id, name, role, description, image_url, display_order")
+        .select("*")
         .eq("is_active", true)
         .order("display_order", { ascending: true });
       if (error) throw error;

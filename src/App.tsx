@@ -14,6 +14,7 @@ import Auth from "./pages/Auth";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
+import ExpertProfile from "./pages/ExpertProfile";
 
 // Admin Pages
 import Dashboard from "./pages/admin/Dashboard";
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/expert/:id" element={<ExpertProfile />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
             
