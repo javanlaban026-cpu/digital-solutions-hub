@@ -113,7 +113,6 @@ const ExpertCard = ({
         ref={cardRef}
         className={`
           relative group cursor-pointer
-          ${isFounder ? 'lg:col-span-2 lg:row-span-1' : ''}
           transform transition-all duration-700 ease-out
           ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
         `}
@@ -130,7 +129,7 @@ const ExpertCard = ({
         shadow-premium
         transition-all duration-500
         hover:-translate-y-2 hover:shadow-[0_20px_60px_hsl(0_0%_0%_/_0.5),0_0_100px_hsl(43_74%_49%_/_0.12)]
-        ${isFounder ? 'p-8 lg:p-10' : 'p-6 lg:p-8'}
+        ${isFounder ? 'p-6 lg:p-8 ring-2 ring-gold/20' : 'p-6 lg:p-8'}
       `}>
         {/* Floating particles effect */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -138,11 +137,11 @@ const ExpertCard = ({
           <div className="absolute bottom-10 right-10 w-24 h-24 bg-primary/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }} />
         </div>
 
-        <div className={`relative z-10 ${isFounder ? 'lg:flex lg:gap-10 lg:items-start' : ''}`}>
+        <div className="relative z-10">
           {/* Portrait with 3D effect */}
-          <div className={`relative ${isFounder ? 'lg:flex-shrink-0' : 'mx-auto'} mb-6 lg:mb-0`}>
+          <div className="relative mx-auto mb-6">
             <div className={`
-              relative ${isFounder ? 'w-40 h-40' : 'w-32 h-32'} mx-auto lg:mx-0
+              relative ${isFounder ? 'w-36 h-36' : 'w-32 h-32'} mx-auto
               rounded-2xl overflow-hidden
               shadow-[0_8px_32px_rgba(0,0,0,0.4)]
               border-2 border-gold/20
@@ -166,18 +165,18 @@ const ExpertCard = ({
             
             {/* Founder badge */}
             {isFounder && (
-              <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-gold to-gold-muted text-navy text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-gold to-gold-muted text-navy text-xs font-bold px-3 py-1 rounded-full shadow-lg">
                 FOUNDER
               </div>
             )}
           </div>
 
           {/* Content */}
-          <div className={`${isFounder ? 'lg:flex-1' : 'text-center lg:text-left'}`}>
+          <div className="text-center">
             {/* Name & Role */}
             <h3 className={`
               font-heading font-bold text-ivory
-              ${isFounder ? 'text-2xl lg:text-3xl' : 'text-xl lg:text-2xl'}
+              ${isFounder ? 'text-2xl' : 'text-xl lg:text-2xl'}
               mb-1
             `}>
               {member.name}
@@ -187,11 +186,7 @@ const ExpertCard = ({
             </p>
 
             {/* Tagline/Quote */}
-            <p className={`
-              text-muted-foreground italic text-sm mb-5
-              border-l-2 border-gold/30 pl-4
-              ${isFounder ? '' : 'mx-auto lg:mx-0 max-w-xs'}
-            `}>
+            <p className="text-muted-foreground italic text-sm mb-5 max-w-xs mx-auto line-clamp-4">
               "{member.tagline || member.description || 'Passionate about building exceptional digital solutions that transform businesses.'}"
             </p>
 
@@ -206,7 +201,7 @@ const ExpertCard = ({
             </div>
 
             {/* Social/Contact Icons */}
-            <div className="flex items-center justify-center lg:justify-start gap-3" onClick={(e) => e.preventDefault()}>
+            <div className="flex items-center justify-center gap-3" onClick={(e) => e.preventDefault()}>
               {member.linkedin_url && (
                 <a 
                   href={member.linkedin_url}
