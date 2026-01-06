@@ -74,6 +74,54 @@ const AnimatedStat = ({ value, suffix = "", label, delay = 0 }: AnimatedStatProp
   );
 };
 
+// Skill tags based on role
+const getSkillTags = (role: string): string[] => {
+  const roleLower = role.toLowerCase();
+  
+  // Base skills everyone likely has
+  const baseSkills = ['Strategy', 'Leadership'];
+  
+  if (roleLower.includes('founder') || roleLower.includes('ceo')) {
+    return ['Vision', 'Strategy', 'Innovation', 'Leadership'];
+  }
+  if (roleLower.includes('cto') || roleLower.includes('chief technology')) {
+    return ['Architecture', 'Cloud', 'DevOps', 'AI/ML'];
+  }
+  if (roleLower.includes('developer') || roleLower.includes('engineer')) {
+    if (roleLower.includes('frontend') || roleLower.includes('front-end')) {
+      return ['React', 'TypeScript', 'UI/UX', 'Tailwind'];
+    }
+    if (roleLower.includes('backend') || roleLower.includes('back-end')) {
+      return ['Node.js', 'Python', 'APIs', 'Databases'];
+    }
+    if (roleLower.includes('full')) {
+      return ['React', 'Node.js', 'TypeScript', 'Cloud'];
+    }
+    return ['JavaScript', 'TypeScript', 'React', 'APIs'];
+  }
+  if (roleLower.includes('designer') || roleLower.includes('ux') || roleLower.includes('ui')) {
+    return ['Figma', 'UI/UX', 'Prototyping', 'Design Systems'];
+  }
+  if (roleLower.includes('product')) {
+    return ['Agile', 'Roadmaps', 'Analytics', 'User Research'];
+  }
+  if (roleLower.includes('marketing') || roleLower.includes('cmo')) {
+    return ['SEO', 'Analytics', 'Content', 'Growth'];
+  }
+  if (roleLower.includes('data') || roleLower.includes('analyst')) {
+    return ['SQL', 'Python', 'Visualization', 'ML'];
+  }
+  if (roleLower.includes('devops') || roleLower.includes('cloud') || roleLower.includes('infrastructure')) {
+    return ['AWS', 'Docker', 'Kubernetes', 'CI/CD'];
+  }
+  if (roleLower.includes('lead') || roleLower.includes('manager')) {
+    return ['Team Lead', 'Agile', 'Mentoring', 'Architecture'];
+  }
+  
+  // Default skills
+  return ['Solutions', 'Innovation', 'Consulting', 'Tech'];
+};
+
 // Badge configuration based on role
 const getRoleBadge = (role: string): { label: string; gradient: string; textColor: string } | null => {
   const roleLower = role.toLowerCase();
@@ -221,9 +269,21 @@ const ExpertCard = ({
             </p>
 
             {/* Tagline/Quote */}
-            <p className="text-muted-foreground italic text-sm mb-5 max-w-xs mx-auto line-clamp-4">
+            <p className="text-muted-foreground italic text-sm mb-4 max-w-xs mx-auto line-clamp-3">
               "{member.tagline || member.description || 'Passionate about building exceptional digital solutions that transform businesses.'}"
             </p>
+
+            {/* Skill Tags */}
+            <div className="flex flex-wrap justify-center gap-2 mb-5">
+              {getSkillTags(member.role).map((skill, idx) => (
+                <span
+                  key={idx}
+                  className="px-2.5 py-1 text-xs font-medium rounded-full bg-gold/10 text-gold border border-gold/20 hover:bg-gold/20 transition-colors"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
 
             {/* Stats Grid */}
             <div className={`
