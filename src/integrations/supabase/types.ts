@@ -199,6 +199,36 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          country: string | null
+          created_at: string
+          id: string
+          page_path: string
+          referrer: string | null
+          session_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          page_path: string
+          referrer?: string | null
+          session_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          id?: string
+          page_path?: string
+          referrer?: string | null
+          session_id?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       portfolio_items: {
         Row: {
           category: string

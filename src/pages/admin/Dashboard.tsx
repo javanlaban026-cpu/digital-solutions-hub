@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, Shield, UserCheck, Activity, TrendingUp, Clock } from "lucide-react";
+import { Users, Shield, UserCheck, Activity, TrendingUp, Clock, Eye, Globe, Zap } from "lucide-react";
+import { useRealtimeVisitorStats } from "@/hooks/useRealtimeVisitorStats";
 
 interface DashboardStats {
   totalUsers: number;
@@ -19,6 +20,7 @@ const Dashboard = () => {
     recentSignups: 0,
   });
   const [loading, setLoading] = useState(true);
+  const { stats: visitorStats, loading: visitorLoading } = useRealtimeVisitorStats();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -64,7 +66,7 @@ const Dashboard = () => {
     fetchStats();
   }, []);
 
-  const statCards = [
+  const userStatCards = [
     {
       title: "Total Users",
       value: stats.totalUsers,
@@ -95,6 +97,38 @@ const Dashboard = () => {
     },
   ];
 
+  const visitorStatCards = [
+    {
+      title: "Live Visitors",
+      value: visitorStats.liveVisitors,
+      icon: Zap,
+      color: "text-green-500",
+      bgColor: "bg-green-500/10",
+      isLive: true,
+    },
+    {
+      title: "Today's Views",
+      value: visitorStats.todayViews,
+      icon: Eye,
+      color: "text-amber-500",
+      bgColor: "bg-amber-500/10",
+    },
+    {
+      title: "Today's Visitors",
+      value: visitorStats.todayUniqueVisitors,
+      icon: Globe,
+      color: "text-cyan-500",
+      bgColor: "bg-cyan-500/10",
+    },
+    {
+      title: "Total Page Views",
+      value: visitorStats.totalViews,
+      icon: Activity,
+      color: "text-rose-500",
+      bgColor: "bg-rose-500/10",
+    },
+  ];
+
   return (
     <AdminLayout>
       <div className="space-y-8">
@@ -105,25 +139,63 @@ const Dashboard = () => {
           </p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {statCards.map((stat) => (
-            <Card key={stat.title} className="blur-card border-border">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{stat.title}</p>
-                    <p className="text-3xl font-heading font-bold text-foreground mt-1">
-                      {loading ? "..." : stat.value}
-                    </p>
+        {/* Realtime Visitor Stats */}
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <h2 className="text-lg font-semibold text-foreground">Real-time Visitor Stats</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {visitorStatCards.map((stat) => (
+              <Card key={stat.title} className="blur-card border-border relative overflow-hidden">
+                {stat.isLive && (
+                  <div className="absolute top-2 right-2">
+                    <span className="flex items-center gap-1 text-xs text-green-500 font-medium">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                      LIVE
+                    </span>
                   </div>
-                  <div className={`p-3 rounded-xl ${stat.bgColor}`}>
-                    <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                )}
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">{stat.title}</p>
+                      <p className="text-3xl font-heading font-bold text-foreground mt-1">
+                        {visitorLoading ? "..." : stat.value.toLocaleString()}
+                      </p>
+                    </div>
+                    <div className={`p-3 rounded-xl ${stat.bgColor}`}>
+                      <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* User Stats Grid */}
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-4">User Statistics</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {userStatCards.map((stat) => (
+              <Card key={stat.title} className="blur-card border-border">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">{stat.title}</p>
+                      <p className="text-3xl font-heading font-bold text-foreground mt-1">
+                        {loading ? "..." : stat.value}
+                      </p>
+                    </div>
+                    <div className={`p-3 rounded-xl ${stat.bgColor}`}>
+                      <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
 
         {/* Quick Actions & Recent Activity */}
@@ -186,10 +258,10 @@ const Dashboard = () => {
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-lg bg-secondary/50">
-                  <span className="text-muted-foreground">API Services</span>
+                  <span className="text-muted-foreground">Realtime Tracking</span>
                   <span className="flex items-center gap-2 text-green-500">
                     <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    Running
+                    Active
                   </span>
                 </div>
               </div>
