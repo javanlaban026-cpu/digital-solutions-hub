@@ -74,15 +74,50 @@ const AnimatedStat = ({ value, suffix = "", label, delay = 0 }: AnimatedStatProp
   );
 };
 
+// Badge configuration based on role
+const getRoleBadge = (role: string): { label: string; gradient: string; textColor: string } | null => {
+  const roleLower = role.toLowerCase();
+  
+  if (roleLower.includes('co-founder') || roleLower.includes('co founder')) {
+    return { label: 'CO-FOUNDER', gradient: 'from-gold via-gold-muted to-gold', textColor: 'text-navy' };
+  }
+  if (roleLower.includes('founder') || roleLower.includes('ceo')) {
+    return { label: roleLower.includes('ceo') ? 'CEO' : 'FOUNDER', gradient: 'from-gold to-gold-muted', textColor: 'text-navy' };
+  }
+  if (roleLower.includes('cto') || roleLower.includes('chief technology')) {
+    return { label: 'CTO', gradient: 'from-blue-500 to-cyan-400', textColor: 'text-white' };
+  }
+  if (roleLower.includes('coo') || roleLower.includes('chief operating')) {
+    return { label: 'COO', gradient: 'from-emerald-500 to-teal-400', textColor: 'text-white' };
+  }
+  if (roleLower.includes('cfo') || roleLower.includes('chief financial')) {
+    return { label: 'CFO', gradient: 'from-purple-500 to-violet-400', textColor: 'text-white' };
+  }
+  if (roleLower.includes('lead') || roleLower.includes('head')) {
+    return { label: 'LEAD', gradient: 'from-orange-500 to-amber-400', textColor: 'text-white' };
+  }
+  if (roleLower.includes('senior') || roleLower.includes('sr.')) {
+    return { label: 'SENIOR', gradient: 'from-slate-600 to-slate-500', textColor: 'text-white' };
+  }
+  if (roleLower.includes('director')) {
+    return { label: 'DIRECTOR', gradient: 'from-rose-500 to-pink-400', textColor: 'text-white' };
+  }
+  if (roleLower.includes('manager')) {
+    return { label: 'MANAGER', gradient: 'from-indigo-500 to-blue-400', textColor: 'text-white' };
+  }
+  
+  return null;
+};
+
 const ExpertCard = ({ 
   member, 
-  isFounder = false,
   animationDelay = 0 
 }: { 
   member: TeamMember; 
-  isFounder?: boolean;
   animationDelay?: number;
 }) => {
+  const badge = getRoleBadge(member.role);
+  const isHighlighted = badge !== null;
   const cardRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -129,7 +164,7 @@ const ExpertCard = ({
         shadow-premium
         transition-all duration-500
         hover:-translate-y-2 hover:shadow-[0_20px_60px_hsl(0_0%_0%_/_0.5),0_0_100px_hsl(43_74%_49%_/_0.12)]
-        ${isFounder ? 'p-6 lg:p-8 ring-2 ring-gold/20' : 'p-6 lg:p-8'}
+        ${isHighlighted ? 'p-6 lg:p-8 ring-2 ring-gold/20' : 'p-6 lg:p-8'}
       `}>
         {/* Floating particles effect */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -141,7 +176,7 @@ const ExpertCard = ({
           {/* Portrait with 3D effect */}
           <div className="relative mx-auto mb-6">
             <div className={`
-              relative ${isFounder ? 'w-36 h-36' : 'w-32 h-32'} mx-auto
+              relative ${isHighlighted ? 'w-36 h-36' : 'w-32 h-32'} mx-auto
               rounded-2xl overflow-hidden
               shadow-[0_8px_32px_rgba(0,0,0,0.4)]
               border-2 border-gold/20
@@ -163,10 +198,10 @@ const ExpertCard = ({
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
             </div>
             
-            {/* Founder badge */}
-            {isFounder && (
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-gold to-gold-muted text-navy text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                FOUNDER
+            {/* Role badge - shows for Founder, Co-Founder, CTO, CEO, etc. */}
+            {badge && (
+              <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gradient-to-r ${badge.gradient} ${badge.textColor} text-xs font-bold px-3 py-1 rounded-full shadow-lg whitespace-nowrap`}>
+                {badge.label}
               </div>
             )}
           </div>
@@ -176,7 +211,7 @@ const ExpertCard = ({
             {/* Name & Role */}
             <h3 className={`
               font-heading font-bold text-ivory
-              ${isFounder ? 'text-2xl' : 'text-xl lg:text-2xl'}
+              ${isHighlighted ? 'text-2xl' : 'text-xl lg:text-2xl'}
               mb-1
             `}>
               {member.name}
@@ -329,7 +364,6 @@ export const ExpertiseShowcase = () => {
               <ExpertCard
                 key={member.id}
                 member={member}
-                isFounder={index === 0}
                 animationDelay={index * 150}
               />
             ))}
