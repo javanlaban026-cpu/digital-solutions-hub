@@ -16,6 +16,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 import ExpertProfile from "./pages/ExpertProfile";
+import ServiceDetail from "./pages/ServiceDetail";
 
 // Admin Pages
 import Dashboard from "./pages/admin/Dashboard";
@@ -43,6 +44,7 @@ const App = () => (
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/services/:slug" element={<ServiceDetail />} />
             <Route path="/products" element={<Products />} />
             <Route path="/about" element={<About />} />
             <Route path="/portfolio" element={<Portfolio />} />

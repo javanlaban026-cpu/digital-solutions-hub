@@ -307,6 +307,116 @@ export type Database = {
         }
         Relationships: []
       }
+      service_appointments: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          preferred_date: string | null
+          preferred_time: string | null
+          service_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          service_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          service_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_appointments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          category: string
+          created_at: string
+          delivery_time: string | null
+          display_order: number | null
+          features: Json | null
+          full_description: string | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          process_steps: Json | null
+          short_description: string | null
+          slug: string
+          starting_price: number | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          delivery_time?: string | null
+          display_order?: number | null
+          features?: Json | null
+          full_description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          process_steps?: Json | null
+          short_description?: string | null
+          slug: string
+          starting_price?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          delivery_time?: string | null
+          display_order?: number | null
+          features?: Json | null
+          full_description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          process_steps?: Json | null
+          short_description?: string | null
+          slug?: string
+          starting_price?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           id: string
