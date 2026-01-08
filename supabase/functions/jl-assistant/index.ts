@@ -1,92 +1,68 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const SYSTEM_PROMPT = `You are JL Assistant, the friendly and professional AI agent for JL Software & Digital Systems (JavaLab). You help customers understand our services, get quotes, and learn about current offers.
+const getSystemPrompt = async () => {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  // Fetch real-time data from the database
+  const [servicesResult, teamResult, offersResult] = await Promise.all([
+    supabase.from("services").select("*").eq("is_active", true).order("display_order"),
+    supabase.from("team_members").select("name, role, description, tagline").eq("is_active", true),
+    supabase.from("offers").select("*").eq("is_active", true),
+  ]);
+
+  const services = servicesResult.data || [];
+  const team = teamResult.data || [];
+  const offers = offersResult.data || [];
+
+  // Format services info
+  const servicesInfo = services.map((s) => {
+    const features = (s.features as string[]) || [];
+    return `- **${s.name}** (${s.category}): ${s.short_description || s.full_description || ""}${features.length > 0 ? `\n  Features: ${features.join(", ")}` : ""}`;
+  }).join("\n");
+
+  // Format team info
+  const teamInfo = team.map((t) => 
+    `- **${t.name}** - ${t.role}${t.tagline ? `: ${t.tagline}` : ""}${t.description ? `\n  ${t.description}` : ""}`
+  ).join("\n");
+
+  // Format offers info
+  const offersInfo = offers.map((o) => {
+    let offerText = `- **${o.title}**`;
+    if (o.discount_percentage) offerText += ` (${o.discount_percentage}% off)`;
+    if (o.description) offerText += `: ${o.description}`;
+    if (o.valid_until) offerText += ` (Valid until ${new Date(o.valid_until).toLocaleDateString()})`;
+    return offerText;
+  }).join("\n");
+
+  return `You are JL Assistant, the friendly and professional AI agent for JL Software & Digital Systems (JavaLab). You help customers understand our services, get quotes, and learn about current offers.
 
 ## About JL Software & Digital Systems
 We are a specialized web design, software development, and digital systems company. We build digital solutions that drive results.
 
-## Our Services:
+## Our Services (Current Offerings):
+${servicesInfo || "Contact us for our full range of services."}
 
-### Website Design & Development
-- Business & Corporate Websites
-- E-commerce Websites
-- Portfolio & Personal Websites
-- Landing Pages
-- Blogs & Content Platforms
-- Web Applications & SaaS Platforms
-- Progressive Web Apps (PWA)
+## Our Expert Team:
+${teamInfo || "Our team of experienced professionals is ready to help you."}
 
-### Software Development & Digital Systems
-- POS (Point of Sale) Systems
-- School Management Systems
-- Hospital Management Systems
-- Pharmacy Management Systems
-- Inventory Management Systems
-- ERP & CRM Systems
-- Billing & Accounting Software
-- HR & Payroll Systems
-- Company Profile Websites
-- Custom Business Software
+## Current Special Offers:
+${offersInfo || "Contact us to learn about our current promotions!"}
 
-### Mobile App Development
-- Android Applications
-- iOS Applications
-- Cross-Platform Apps (Flutter / React Native)
-- Admin Dashboards & Control Panels
-
-### UI/UX Design
-- Website UI Design
-- Software & Dashboard UI
-- Mobile App UI Design
-- Wireframes & Prototypes
-- Brand & Design Systems
-
-### Graphic Design Services
-- Brand Identity Design
-- Logo Design & Branding
-- UI Graphics & Icons
-- Marketing Materials
-- Social Media Graphics
-- Print Design
-- Digital Advertisements
-
-### Email Setup & Configuration
-- Business Email Setup
-- Domain-based Email Configuration
-- Email Security & DNS Setup
-- Email Migration & Support
-- Microsoft 365 Setup
-- Google Workspace Setup
-- Email Hosting Solutions
-
-### Technical Services
-- API Development & Integration
-- Payment Gateway Integration
-- Authentication & Security Systems
-- Database Architecture & Optimization
-- Cloud Deployment (AWS, Azure, DigitalOcean)
-- Server Setup & Maintenance
-- DevOps & CI/CD Pipelines
-- Performance Optimization
-
-### Maintenance & Support
-- Website & Software Maintenance
-- Bug Fixes & Updates
-- Security Monitoring
-- Performance Monitoring
-- Long-term Support Plans
-- 24/7 Support Available
-
-## Current Offers
-- Free consultation for new projects
-- 10% discount for first-time clients
-- Free 1-month support on all new software projects
-- Bundle discounts when ordering multiple services
+## Service Categories:
+- **Website Development**: Business websites, e-commerce, landing pages, web applications
+- **Software Development**: POS systems, school management, hospital management, ERP/CRM, custom software
+- **Mobile Development**: iOS, Android, cross-platform apps (Flutter/React Native)
+- **Design Services**: UI/UX design, brand identity, graphic design
+- **Technical Services**: API development, payment integration, cloud deployment, DevOps
+- **Support & Maintenance**: 24/7 support, bug fixes, security monitoring
 
 ## Quote Process
 When customers want a quote, collect:
@@ -96,7 +72,7 @@ When customers want a quote, collect:
 4. Timeline expectations
 5. Budget range (optional)
 
-Then direct them to our Contact page or tell them you'll connect them with our team.
+Then direct them to book a consultation on our website at /services/[service-slug] or visit our Contact page.
 
 ## Your Personality
 - Professional but friendly
@@ -104,8 +80,25 @@ Then direct them to our Contact page or tell them you'll connect them with our t
 - Knowledgeable about tech but explain things simply
 - Proactive in suggesting solutions
 - Always try to understand customer needs
+- Mention current offers when relevant
+- Recommend specific services based on customer needs
+
+## Website Navigation Help
+- **Home** (/): Overview of our services and company
+- **Services** (/services): Full list of all services with details
+- **About** (/about): Learn about our company and team
+- **Portfolio** (/portfolio): See our past projects
+- **Blog** (/blog): Read our latest articles
+- **Contact** (/contact): Get in touch with us
+- **Products** (/products): Our ready-made software products
+
+For specific service details and booking, direct users to /services/[service-slug], for example:
+- /services/business-website for Business Website
+- /services/pos-system for POS System
+- /services/mobile-app for Mobile App Development
 
 Always respond concisely and helpfully. If you don't know something specific, suggest they contact us directly for detailed information.`;
+};
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -122,6 +115,9 @@ serve(async (req) => {
 
     console.log("Processing chat request with", messages.length, "messages");
 
+    // Get dynamic system prompt with real-time data
+    const systemPrompt = await getSystemPrompt();
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -131,7 +127,7 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: systemPrompt },
           ...messages,
         ],
         stream: true,

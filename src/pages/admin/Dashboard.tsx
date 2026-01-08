@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Users, Shield, UserCheck, Activity, TrendingUp, Clock, Eye, Globe, Zap } from "lucide-react";
 import { useRealtimeVisitorStats } from "@/hooks/useRealtimeVisitorStats";
+import { usePageAnalytics } from "@/hooks/usePageAnalytics";
+import { TopPagesTable } from "@/components/admin/TopPagesTable";
+import { VisitorChart } from "@/components/admin/VisitorChart";
 
 interface DashboardStats {
   totalUsers: number;
@@ -21,6 +24,7 @@ const Dashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const { stats: visitorStats, loading: visitorLoading } = useRealtimeVisitorStats();
+  const { analytics, loading: analyticsLoading } = usePageAnalytics();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -197,6 +201,23 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
+
+        {/* Analytics Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <VisitorChart 
+            data={analytics.dailyViews} 
+            title="Page Views (Last 7 Days)" 
+            loading={analyticsLoading} 
+          />
+          <VisitorChart 
+            data={analytics.weeklyViews} 
+            title="Weekly Trends (Last 4 Weeks)" 
+            loading={analyticsLoading} 
+          />
+        </div>
+
+        {/* Top Pages */}
+        <TopPagesTable pages={analytics.topPages} loading={analyticsLoading} />
 
         {/* Quick Actions & Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
