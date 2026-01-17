@@ -30,12 +30,12 @@ export const Navbar = () => {
   const { user, isAdmin, signOut, loading } = useAuth();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-cyan-500/20">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="JL Software" className="h-12 w-auto object-contain" />
+          <Link to="/" className="flex items-center gap-3 group">
+            <img src={logo} alt="JL Software" className="h-12 w-auto object-contain transition-transform group-hover:scale-105" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -45,10 +45,10 @@ export const Navbar = () => {
                 key={link.href}
                 to={link.href}
                 className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
+                  "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300",
                   location.pathname === link.href
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                    ? "text-cyan-400 bg-cyan-500/10 shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+                    : "text-foreground/80 hover:text-cyan-400 hover:bg-cyan-500/5"
                 )}
               >
                 {link.label}
@@ -64,25 +64,25 @@ export const Navbar = () => {
                 {user ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="default" className="gap-2">
-                        <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
-                          <User className="w-4 h-4 text-primary" />
+                      <Button variant="outline" size="default" className="gap-2 border-cyan-500/30 hover:border-cyan-500/60 hover:bg-cyan-500/10">
+                        <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                          <User className="w-4 h-4 text-cyan-400" />
                         </div>
                         <span className="hidden sm:inline">
                           {user.email?.split("@")[0]}
                         </span>
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuContent align="end" className="w-48 bg-background/95 backdrop-blur-xl border-cyan-500/20">
                       {isAdmin && (
                         <>
                           <DropdownMenuItem asChild>
-                            <Link to="/admin" className="flex items-center gap-2">
+                            <Link to="/admin" className="flex items-center gap-2 hover:text-cyan-400">
                               <LayoutDashboard className="w-4 h-4" />
                               Admin Panel
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuSeparator />
+                          <DropdownMenuSeparator className="bg-cyan-500/20" />
                         </>
                       )}
                       <DropdownMenuItem
@@ -96,7 +96,7 @@ export const Navbar = () => {
                   </DropdownMenu>
                 ) : (
                   <Link to="/auth">
-                    <Button variant="outline" size="default" className="gap-2">
+                    <Button variant="outline" size="default" className="gap-2 border-cyan-500/30 hover:border-cyan-500/60 hover:bg-cyan-500/10">
                       <LogIn className="w-4 h-4" />
                       Sign In
                     </Button>
@@ -105,7 +105,7 @@ export const Navbar = () => {
               </>
             )}
             <Link to="/contact">
-              <Button variant="hero" size="default">
+              <Button className="bg-cyan-500 hover:bg-cyan-600 text-white shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300">
                 Start Your Project
               </Button>
             </Link>
@@ -122,7 +122,7 @@ export const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="lg:hidden py-4 border-t border-border/50 animate-fade-in">
+          <div className="lg:hidden py-4 border-t border-cyan-500/20 animate-fade-in">
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <Link
@@ -130,10 +130,10 @@ export const Navbar = () => {
                   to={link.href}
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200",
+                    "px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300",
                     location.pathname === link.href
-                      ? "text-primary bg-primary/10"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                      ? "text-cyan-400 bg-cyan-500/10"
+                      : "text-foreground/80 hover:text-cyan-400 hover:bg-cyan-500/5"
                   )}
                 >
                   {link.label}
@@ -148,7 +148,7 @@ export const Navbar = () => {
                         <Link
                           to="/admin"
                           onClick={() => setIsOpen(false)}
-                          className="px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary flex items-center gap-2"
+                          className="px-4 py-3 rounded-lg text-sm font-medium text-foreground/80 hover:text-cyan-400 hover:bg-cyan-500/5 flex items-center gap-2"
                         >
                           <LayoutDashboard className="w-4 h-4" />
                           Admin Panel
@@ -169,7 +169,7 @@ export const Navbar = () => {
                     <Link
                       to="/auth"
                       onClick={() => setIsOpen(false)}
-                      className="px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary flex items-center gap-2"
+                      className="px-4 py-3 rounded-lg text-sm font-medium text-foreground/80 hover:text-cyan-400 hover:bg-cyan-500/5 flex items-center gap-2"
                     >
                       <LogIn className="w-4 h-4" />
                       Sign In
@@ -179,7 +179,7 @@ export const Navbar = () => {
               )}
               
               <Link to="/contact" onClick={() => setIsOpen(false)} className="mt-2">
-                <Button variant="hero" size="lg" className="w-full">
+                <Button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white shadow-lg shadow-cyan-500/25">
                   Start Your Project
                 </Button>
               </Link>
