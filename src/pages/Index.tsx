@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { ServiceCard } from "@/components/shared/ServiceCard";
 import { ExpertiseShowcase } from "@/components/home/ExpertiseShowcase";
-import heroImage from "@/assets/hero-workspace.png";
+import { HeroCarousel } from "@/components/home/HeroCarousel";
 import {
   Globe,
   Code2,
@@ -65,50 +65,8 @@ const clientTypes = [
 const Index = () => {
   return (
     <Layout>
-      {/* Hero Section - Clean with image */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Hero Background Image */}
-        <div className="absolute inset-0">
-          <img 
-            src={heroImage} 
-            alt="Developer workspace" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/60" />
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8 animate-fade-in">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              Web Design, Software Development & Digital Systems
-            </div>
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6 animate-slide-up">
-              JL Software &{" "}
-              <span className="gradient-text">Digital Systems</span>
-            </h1>
-            
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-              We build modern websites, powerful software, and intelligent digital systems that help businesses operate smarter and grow faster.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-start gap-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
-              <Link to="/contact">
-                <Button variant="hero" size="xl">
-                  Start Your Project
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
-              <Link to="/contact">
-                <Button variant="heroOutline" size="xl">
-                  Free Consultation
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Carousel Section */}
+      <HeroCarousel />
 
       {/* What We Do Section */}
       <section className="py-24 lg:py-32">
