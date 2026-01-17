@@ -137,7 +137,7 @@ export const HeroCarousel = () => {
             className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-4 animate-fade-in drop-shadow-lg"
           >
             We Build{" "}
-            <span className="text-orange-400">{currentSlide.title}</span>
+            <span className="text-cyan-400">{currentSlide.title}</span>
           </h1>
 
           {/* Description */}
@@ -158,7 +158,7 @@ export const HeroCarousel = () => {
             <Link to={currentSlide.link}>
               <Button 
                 size="xl" 
-                className="bg-orange-500 hover:bg-orange-600 text-white border-0 shadow-lg"
+                className="bg-cyan-500 hover:bg-cyan-600 text-white border-0 shadow-lg"
               >
                 {currentSlide.cta}
                 <ArrowRight className="w-5 h-5" />
@@ -201,7 +201,7 @@ export const HeroCarousel = () => {
             onClick={() => goToSlide(index)}
             className={`transition-all duration-300 rounded-full ${
               index === currentIndex
-                ? "w-10 h-3 bg-orange-500"
+                ? "w-10 h-3 bg-cyan-500"
                 : "w-3 h-3 bg-white/50 hover:bg-white/70"
             }`}
             aria-label={`Go to slide ${index + 1}`}
