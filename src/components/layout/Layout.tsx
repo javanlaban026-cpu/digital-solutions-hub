@@ -3,6 +3,7 @@ import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { JLAssistant } from "@/components/shared/JLAssistant";
 import { FloatingOfferBadge } from "@/components/shared/FloatingOfferBadge";
+import FloatingCodeWidget from "@/components/shared/FloatingCodeWidget";
 
 interface LayoutProps {
   children: ReactNode;
@@ -16,6 +17,7 @@ export const Layout = ({ children }: LayoutProps) => {
       <Footer />
       <JLAssistant />
       <FloatingOfferBadge />
+      <FloatingCodeWidget />
     </div>
   );
 };
