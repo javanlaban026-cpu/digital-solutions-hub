@@ -5,6 +5,7 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { ServiceCard } from "@/components/shared/ServiceCard";
 import { ExpertiseShowcase } from "@/components/home/ExpertiseShowcase";
 import { HeroCarousel } from "@/components/home/HeroCarousel";
+import CodeTypingAnimation from "@/components/home/CodeTypingAnimation";
 import {
   Globe,
   Code2,
@@ -101,6 +102,9 @@ const Index = () => {
 
       {/* Living Expertise Showcase */}
       <ExpertiseShowcase />
+
+      {/* Code Typing Animation Section */}
+      <CodeTypingAnimation />
 
       {/* Who We Work With */}
       <section className="py-24 lg:py-32 bg-muted/30">
