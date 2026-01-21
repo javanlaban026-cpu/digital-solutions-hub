@@ -98,21 +98,20 @@ const BlogPostPage = () => {
 
   return (
     <Layout>
-      <article className="py-12 lg:py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-[780px] mx-auto">
+      <article className="py-8 lg:py-12">
+        <div className="container mx-auto px-4 lg:px-8">
             
             {/* Back Navigation - Minimal */}
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-cyan-400 transition-colors mb-8 text-sm"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-cyan-400 transition-colors mb-4 text-sm"
             >
               <ArrowLeft className="w-4 h-4" /> Back to Journal
             </Link>
 
             {/* Article Header */}
-            <header className="mb-10">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight mb-4">
+            <header className="mb-6">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground leading-tight mb-2">
                 {post.title}
               </h1>
               
@@ -131,15 +130,15 @@ const BlogPostPage = () => {
             </header>
 
             {/* Magazine Intro Section - Image Left, Text Right */}
-            <div className="mb-12">
-              <div className={`${post.featured_image ? 'md:flex md:gap-8' : ''}`}>
+            <div className="mb-8">
+              <div className={`${post.featured_image ? 'md:flex md:gap-6' : ''}`}>
                 {/* Feature Image - Small, Left-aligned */}
                 {post.featured_image && (
-                  <div className="flex-shrink-0 mb-6 md:mb-0">
+                  <div className="flex-shrink-0 mb-4 md:mb-0">
                     <img
                       src={post.featured_image}
                       alt={post.title}
-                      className="w-full md:w-[300px] aspect-[4/3] object-cover rounded-lg shadow-lg"
+                      className="w-full md:w-[280px] aspect-[4/3] object-cover rounded-lg shadow-lg"
                     />
                   </div>
                 )}
@@ -147,14 +146,14 @@ const BlogPostPage = () => {
                 {/* Introduction Paragraphs */}
                 <div className="flex-1">
                   {post.excerpt && (
-                    <p className="text-lg md:text-xl text-foreground/80 leading-relaxed mb-6 font-medium italic border-l-4 border-cyan-500/50 pl-4">
+                    <p className="text-base md:text-lg text-foreground/80 leading-normal mb-3 font-medium italic border-l-4 border-cyan-500/50 pl-4">
                       {post.excerpt}
                     </p>
                   )}
                   
                   {/* First paragraph with drop cap */}
                   {post.content.split("\n").filter(p => p.trim())[0] && (
-                    <p className="text-foreground/90 leading-[1.8] text-[17px] first-letter:text-5xl first-letter:font-heading first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-cyan-400">
+                    <p className="text-foreground/90 leading-[1.5] text-base first-letter:text-4xl first-letter:font-heading first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:mt-0.5 first-letter:text-cyan-400">
                       {post.content.split("\n").filter(p => p.trim())[0]}
                     </p>
                   )}
@@ -163,14 +162,14 @@ const BlogPostPage = () => {
             </div>
 
             {/* Soft Divider */}
-            <div className="flex items-center gap-4 mb-10">
+            <div className="flex items-center gap-4 mb-6">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-              <div className="w-2 h-2 rounded-full bg-cyan-500/50" />
+              <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/50" />
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
             </div>
 
-            {/* Article Body - Clean Single Column */}
-            <div className="prose-custom">
+            {/* Article Body - Full Width */}
+            <div className="prose-custom columns-1 lg:columns-2 gap-8">
               {post.content.split("\n").filter(p => p.trim()).slice(1).map((paragraph, index) => {
                 if (!paragraph.trim()) return null;
                 
@@ -179,7 +178,7 @@ const BlogPostPage = () => {
                 
                 if (isHeading) {
                   return (
-                    <h2 key={index} className="text-2xl font-heading font-bold text-foreground mt-10 mb-4">
+                    <h2 key={index} className="text-xl font-heading font-bold text-foreground mt-6 mb-2 break-inside-avoid">
                       {paragraph}
                     </h2>
                   );
@@ -190,8 +189,8 @@ const BlogPostPage = () => {
                 
                 if (isHighlight) {
                   return (
-                    <div key={index} className="bg-cyan-500/5 border-l-4 border-cyan-500 p-4 rounded-r-lg my-6">
-                      <p className="text-foreground/90 leading-[1.8] text-[17px] m-0">
+                    <div key={index} className="bg-cyan-500/5 border-l-4 border-cyan-500 p-3 rounded-r-lg my-3 break-inside-avoid">
+                      <p className="text-foreground/90 leading-[1.5] text-base m-0">
                         {paragraph}
                       </p>
                     </div>
@@ -201,7 +200,7 @@ const BlogPostPage = () => {
                 return (
                   <p
                     key={index}
-                    className="text-foreground/90 leading-[1.8] mb-6 text-[17px]"
+                    className="text-foreground/90 leading-[1.5] mb-3 text-base break-inside-avoid"
                   >
                     {paragraph}
                   </p>
@@ -209,89 +208,82 @@ const BlogPostPage = () => {
               })}
             </div>
 
-            {/* Share Section */}
-            <div className="mt-12 pt-8 border-t border-border">
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-muted-foreground">Share this article:</span>
-                  <div className="flex items-center gap-2">
-                    <button className="p-2 rounded-full border border-border hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-colors">
-                      <Twitter className="w-4 h-4 text-muted-foreground" />
-                    </button>
-                    <button className="p-2 rounded-full border border-border hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-colors">
-                      <Linkedin className="w-4 h-4 text-muted-foreground" />
-                    </button>
-                    <button className="p-2 rounded-full border border-border hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-colors">
-                      <Facebook className="w-4 h-4 text-muted-foreground" />
-                    </button>
-                  </div>
+            {/* Share & Author Section */}
+            <div className="mt-8 pt-6 border-t border-border flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-bold text-sm">JL</span>
                 </div>
-                
+                <div>
+                  <p className="font-heading font-semibold text-foreground text-sm">JavaLab Team</p>
+                  <p className="text-xs text-muted-foreground">JL Software & Digital Systems</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-muted-foreground">Share:</span>
+                <div className="flex items-center gap-1">
+                  <button className="p-1.5 rounded-full border border-border hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-colors">
+                    <Twitter className="w-3.5 h-3.5 text-muted-foreground" />
+                  </button>
+                  <button className="p-1.5 rounded-full border border-border hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-colors">
+                    <Linkedin className="w-3.5 h-3.5 text-muted-foreground" />
+                  </button>
+                  <button className="p-1.5 rounded-full border border-border hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-colors">
+                    <Facebook className="w-3.5 h-3.5 text-muted-foreground" />
+                  </button>
+                </div>
                 <Link to="/contact">
-                  <Button variant="outline" size="sm" className="border-cyan-500/30 hover:bg-cyan-500/10">
-                    Get in Touch
+                  <Button variant="outline" size="sm" className="border-cyan-500/30 hover:bg-cyan-500/10 text-xs h-7">
+                    Contact
                   </Button>
                 </Link>
               </div>
             </div>
 
-            {/* Author Box */}
-            <div className="mt-8 p-6 bg-muted/30 rounded-xl border border-border">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-bold text-lg">JL</span>
+            {/* Related Articles */}
+            {relatedPosts && relatedPosts.length > 0 && (
+              <section className="mt-10 pt-8 border-t border-border">
+                <h3 className="text-lg font-heading font-bold text-foreground mb-6">
+                  Continue Reading
+                </h3>
+                
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {relatedPosts.map((relatedPost) => (
+                    <Link
+                      key={relatedPost.id}
+                      to={`/blog/${relatedPost.slug}`}
+                      className="group flex gap-3 items-start"
+                    >
+                      <div className="overflow-hidden rounded flex-shrink-0 w-16 h-16">
+                        {relatedPost.featured_image ? (
+                          <img
+                            src={relatedPost.featured_image}
+                            alt={relatedPost.title}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-muted flex items-center justify-center">
+                            <FileText className="w-4 h-4 text-muted-foreground/30" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-heading font-medium text-foreground group-hover:text-cyan-400 transition-colors line-clamp-2 text-sm leading-tight">
+                          {relatedPost.title}
+                        </h4>
+                        {relatedPost.published_at && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {format(new Date(relatedPost.published_at), "MMM d")}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-                <div>
-                  <p className="font-heading font-semibold text-foreground">JavaLab Team</p>
-                  <p className="text-sm text-muted-foreground">JL Software & Digital Systems</p>
-                </div>
-              </div>
-            </div>
-          </div>
+              </section>
+            )}
         </div>
-
-        {/* Related Articles */}
-        {relatedPosts && relatedPosts.length > 0 && (
-          <section className="mt-20 py-16 bg-muted/20 border-t border-border">
-            <div className="container mx-auto px-4">
-              <h3 className="text-2xl font-heading font-bold text-foreground mb-10 text-center">
-                Continue Reading
-              </h3>
-              
-              <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                {relatedPosts.map((relatedPost) => (
-                  <Link
-                    key={relatedPost.id}
-                    to={`/blog/${relatedPost.slug}`}
-                    className="group"
-                  >
-                    <div className="overflow-hidden rounded-lg mb-4">
-                      {relatedPost.featured_image ? (
-                        <img
-                          src={relatedPost.featured_image}
-                          alt={relatedPost.title}
-                          className="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full aspect-[4/3] bg-muted flex items-center justify-center">
-                          <FileText className="w-8 h-8 text-muted-foreground/30" />
-                        </div>
-                      )}
-                    </div>
-                    <h4 className="font-heading font-semibold text-foreground group-hover:text-cyan-400 transition-colors line-clamp-2 text-sm">
-                      {relatedPost.title}
-                    </h4>
-                    {relatedPost.published_at && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {format(new Date(relatedPost.published_at), "MMM d, yyyy")}
-                      </p>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
       </article>
     </Layout>
   );
